@@ -46,6 +46,7 @@ const singleGroupConfigSchema = z
   .strict();
 
 const docsConfigSchema = z.object({
+  title: stringOrElementSchema.default('My App'),
   group: z.union([groupConfigSchema, singleGroupConfigSchema]),
   iconLoader: iconLoaderSchema.optional(),
 });
