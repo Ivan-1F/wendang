@@ -8,9 +8,12 @@ const iconLoaderSchema = z.function({
   output: reactNodeSchema,
 });
 
+const iconSchema = z.union([z.string(), reactNodeSchema]);
+export type IconInput = z.input<typeof iconSchema>;
+
 const sectionSchema = z.object({
   title: z.string(),
-  icon: reactNodeSchema.optional(),
+  icon: iconSchema.optional(),
   base: z.string().optional(),
   get children() {
     return pageSchema.array();
@@ -21,7 +24,7 @@ const pageSchema = z.union([z.string(), sectionSchema]);
 
 const groupSchema = z.object({
   title: z.string(),
-  icon: reactNodeSchema.optional(),
+  icon: iconSchema.optional(),
   link: z.string(),
   external: z.boolean().default(false),
   align: z.enum(['leading', 'trailing']).default('leading'),
