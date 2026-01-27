@@ -15,21 +15,25 @@ const pageSchema = z.union([z.string(), sectionSchema]);
 const groupSchema = z.object({
   title: z.string(),
   icon: z.custom<ReactNode>().optional(),
-  link: z.url(),
+  link: z.string(),
   external: z.boolean().default(false),
   align: z.enum(['leading', 'trailing']).default('leading'),
 
   children: sectionSchema.array().default([]),
 });
 
-const groupConfigSchema = z.object({
-  style: z.enum(['navbar', 'dropdown']).default('navbar'),
-  groups: groupSchema.array(),
-});
+const groupConfigSchema = z
+  .object({
+    style: z.enum(['navbar', 'dropdown']).default('navbar'),
+    groups: groupSchema.array(),
+  })
+  .strict();
 
-const singleGroupConfigSchema = z.object({
-  children: sectionSchema.array().default([]),
-});
+const singleGroupConfigSchema = z
+  .object({
+    children: sectionSchema.array().default([]),
+  })
+  .strict();
 
 const docsConfigSchema = z.object({
   group: z.union([groupConfigSchema, singleGroupConfigSchema]),
