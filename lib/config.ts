@@ -21,6 +21,7 @@ const sectionSchema = z.object({
 });
 
 const pageSchema = z.union([z.string(), sectionSchema]);
+export type Page = z.infer<typeof pageSchema>;
 
 const groupSchema = z.object({
   title: z.string(),
@@ -29,8 +30,9 @@ const groupSchema = z.object({
   external: z.boolean().default(false),
   align: z.enum(['leading', 'trailing']).default('leading'),
 
-  children: sectionSchema.array().default([]),
+  children: pageSchema.array().default([]),
 });
+export type Group = z.infer<typeof groupSchema>;
 
 const groupConfigSchema = z
   .object({
