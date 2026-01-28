@@ -27,6 +27,7 @@ async function SidebarItem({
 
     return (
       <SidebarLink
+        className={className}
         href={href}
         title={pageData ? pageData.compiled.frontmatter.title : page}
       />
