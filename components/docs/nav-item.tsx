@@ -1,7 +1,5 @@
 'use client';
 
-import type { DocsConfig } from '@/lib/config';
-import { renderIcon } from '@/lib/icon';
 import Link from 'next/link';
 import type { ReactNode } from 'react';
 import { cn } from '@/lib/utils';
