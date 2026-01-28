@@ -3,26 +3,33 @@ import { cn } from '@/lib/utils';
 import { renderIcon } from '@/lib/icon';
 import docsConfig from '@/docs.config';
 import Link from 'next/link';
+import { getPage } from '@/lib/slug';
+import { connectLinks } from '@/lib/link';
 
-function SidebarItem({
+async function SidebarItem({
   page,
   depth = 0,
+  base,
   className,
 }: {
   page: Page;
   depth?: number;
+  base?: string;
   className?: string;
 }) {
   if (typeof page === 'string') {
+    const href = connectLinks(base, page);
+
+    const pageData = await getPage(
+      href.replace('/docs', '').split('/').filter(Boolean),
+    );
+
     return (
       <Link
-        href={page}
-        className={cn(
-          'block hover:bg-muted py-1.5 px-3 rounded-xl',
-          className,
-        )}
+        href={href}
+        className={cn('block hover:bg-muted py-1.5 px-3 rounded-xl', className)}
       >
-        {page}
+        {pageData ? pageData.compiled.frontmatter.title : page}
       </Link>
     );
   }
@@ -38,11 +45,12 @@ function SidebarItem({
         {renderIcon(page.icon, docsConfig)}
         {page.title}
       </div>
-      {page.children.map((page, index) => (
+      {page.children.map((child, index) => (
         <SidebarItem
           key={index}
-          page={page}
+          page={child}
           depth={depth + 1}
+          base={connectLinks(base, page.base)}
           className={cn({ 'pl-8': depth !== 0 })}
         />
       ))}
@@ -58,7 +66,7 @@ export function Sidebar({ group }: { group: Group }) {
       }
     >
       {group.children.map((page, index) => (
-        <SidebarItem key={index} page={page} />
+        <SidebarItem key={index} page={page} base={group.link} />
       ))}
     </aside>
   );
