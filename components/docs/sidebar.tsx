@@ -60,9 +60,10 @@ async function SidebarItem({
 export function Sidebar({ group }: { group: Group }) {
   return (
     <aside
-      className={
-        'w-80 p-5 pl-0 border-r space-y-8 font-medium text-muted-foreground text-sm'
-      }
+      className={cn(
+        'w-80 p-5 pl-0 border-r space-y-8 font-medium text-muted-foreground text-sm',
+        'sticky h-[calc(100vh-96px)] top-24 bottom-0 overflow-y-auto',
+      )}
     >
       {group.children.map((page, index) => (
         <SidebarItem key={index} page={page} base={group.link} />

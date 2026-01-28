@@ -39,7 +39,7 @@ const NavItems = ({ config }: { config: DocsConfig }) => {
 
 export function Header({ config }: { config: DocsConfig }) {
   return (
-    <nav className={'relative'}>
+    <nav className={'sticky top-0 bg-background'}>
       <div className={'mx-auto max-w-8xl px-0 lg:px-5'}>
         <div className={'h-14 flex items-center'}>
           <div className={'font-medium'}>{config.title}</div>
