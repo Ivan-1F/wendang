@@ -1,5 +1,6 @@
 import { mdxCollection } from 'fuma-content/collections/mdx';
 import { defineConfig } from 'fuma-content/config';
+import remarkGfm from 'remark-gfm';
 import z from 'zod';
 
 const docs = mdxCollection({
@@ -7,6 +8,10 @@ const docs = mdxCollection({
   frontmatter: z.object({
     title: z.string(),
     description: z.string().optional(),
+  }),
+
+  options: () => ({
+    remarkPlugins: [remarkGfm],
   }),
 });
 
