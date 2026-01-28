@@ -1,7 +1,19 @@
 import { notFound } from 'next/navigation';
-import { getPage, matchSection, getPageNavigation } from '@/lib/slug';
+import {
+  getPage,
+  matchSection,
+  getPageNavigation,
+  pathToSlug,
+} from '@/lib/slug';
 import { PageNavigation } from '@/components/docs/page-navigation';
 import docsConfig from '@/docs.config';
+import { docs } from 'content/docs';
+
+export async function generateStaticParams() {
+  return docs.list().map((page) => ({
+    slug: pathToSlug(page.path),
+  }));
+}
 
 export default async function DocsPage({
   params,
@@ -19,8 +31,7 @@ export default async function DocsPage({
 
   // Get navigation for current page
   const groupConfig = docsConfig.group;
-  const currentGroup =
-    'groups' in groupConfig ? groupConfig.groups[0] : null;
+  const currentGroup = 'groups' in groupConfig ? groupConfig.groups[0] : null;
   const navigation = currentGroup
     ? getPageNavigation(slug ?? [], currentGroup)
     : { prev: null, next: null };
