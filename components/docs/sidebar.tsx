@@ -5,6 +5,7 @@ import docsConfig from '@/docs.config';
 import Link from 'next/link';
 import { getPage } from '@/lib/slug';
 import { connectLinks } from '@/lib/link';
+import { SidebarLink } from '@/components/docs/sidebar-link';
 
 async function SidebarItem({
   page,
@@ -25,12 +26,10 @@ async function SidebarItem({
     );
 
     return (
-      <Link
+      <SidebarLink
         href={href}
-        className={cn('block hover:bg-muted py-1.5 px-3 rounded-xl', className)}
-      >
-        {pageData ? pageData.compiled.frontmatter.title : page}
-      </Link>
+        title={pageData ? pageData.compiled.frontmatter.title : page}
+      />
     );
   }
 
