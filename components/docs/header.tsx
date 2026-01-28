@@ -1,6 +1,7 @@
 import type { DocsConfig } from '@/lib/config';
 import { renderIcon } from '@/lib/icon';
 import { NavItem } from '@/components/docs/nav-item';
+import { ThemeSwitcher } from '@/components/theme-switcher';
 
 const NavItems = ({ config }: { config: DocsConfig }) => {
   if (!('groups' in config.group)) {
@@ -42,8 +43,13 @@ export function Header({ config }: { config: DocsConfig }) {
     <nav className={'sticky top-0 bg-background'}>
       {/* px-9 = px-6 (base) + px-3 (sidebar pl-3) */}
       <div className={'px-0 lg:px-9'}>
-        <div className={'h-14 flex items-center'}>
-          <div className={'font-medium'}>{config.title}</div>
+        <div className={'h-14 flex items-center justify-between'}>
+          <div className={'flex items-center'}>
+            <div className={'font-medium'}>{config.title}</div>
+          </div>
+          <div className={'flex items-center'}>
+            <ThemeSwitcher />
+          </div>
         </div>
         <NavItems config={config} />
       </div>
