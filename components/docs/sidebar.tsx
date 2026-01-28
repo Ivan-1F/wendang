@@ -2,7 +2,6 @@ import type { Group, Page } from '@/lib/config';
 import { cn } from '@/lib/utils';
 import { renderIcon } from '@/lib/icon';
 import docsConfig from '@/docs.config';
-import Link from 'next/link';
 import { getPage } from '@/lib/slug';
 import { connectLinks } from '@/lib/link';
 import { SidebarLink } from '@/components/docs/sidebar-link';
@@ -38,7 +37,7 @@ async function SidebarItem({
     <div className={cn('space-y-px', className)}>
       <div
         className={cn('[&>svg]:size-4 ml-3 flex items-center gap-2', {
-          'text-primary mb-3.5': depth === 0,
+          'text-foreground mb-3.5': depth === 0,
           'py-1.5': depth !== 0,
         })}
       >
