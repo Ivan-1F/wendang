@@ -1,37 +1,6 @@
-import Link from 'next/link';
-import type { ReactNode } from 'react';
 import type { DocsConfig } from '@/lib/config';
 import { renderIcon } from '@/lib/icon';
-import { cn } from '@/lib/utils';
-
-function NavItem({
-  icon,
-  title,
-  href,
-  active,
-}: {
-  icon?: ReactNode;
-  title: string;
-  href: string;
-  active?: boolean;
-}) {
-  return (
-    <Link
-      href={href}
-      className={cn('relative h-full flex items-center gap-2 [&>svg]:size-4', {
-        'text-primary': active,
-      })}
-    >
-      {icon}
-      <span className={'text-sm font-medium'}>{title}</span>
-      <div
-        className={cn('absolute z-10 bottom-0 w-full left-0 h-px', {
-          'bg-primary': active,
-        })}
-      ></div>
-    </Link>
-  );
-}
+import { NavItem } from '@/components/docs/nav-item';
 
 const NavItems = ({ config }: { config: DocsConfig }) => {
   if (!('groups' in config.group)) {
