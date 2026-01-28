@@ -43,6 +43,9 @@ next-env.d.ts
 # ide
 /.idea
 
+# fuma-content
+.content
+
 # dev
 docs.config.tsx
 /content
