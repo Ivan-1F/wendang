@@ -2,6 +2,16 @@ import { docs } from 'content/docs';
 import config from '@/docs.config';
 import type { Page, Group } from '@/lib/config';
 
+export interface FlatPage {
+  href: string;
+  slug: string[];
+}
+
+export interface PageNavigation {
+  prev: FlatPage | null;
+  next: FlatPage | null;
+}
+
 // Remove route groups (folders in parentheses) and .mdx extension from path
 export function pathToSlug(path: string): string[] {
   return path
@@ -104,4 +114,56 @@ export function matchSection(slug: string[]): string | null {
   }
 
   return findSection(matchingGroup.children, '');
+}
+
+/**
+ * Flatten a Group's children into an ordered list of pages.
+ */
+export function flattenPages(group: Group): FlatPage[] {
+  const result: FlatPage[] = [];
+  const baseLink = group.link.replace(/\/$/, '');
+
+  function collectPages(pages: Page[], basePath: string): void {
+    for (const page of pages) {
+      if (typeof page === 'string') {
+        // Leaf node - this is a page
+        const pagePath =
+          page === '.' ? basePath : basePath ? `${basePath}/${page}` : page;
+        const href = pagePath ? `${baseLink}/${pagePath}` : baseLink;
+        const slug = pagePath ? pagePath.split('/') : [];
+        result.push({ href, slug });
+      } else {
+        // Section with children - recurse
+        const sectionBase = page.base
+          ? basePath
+            ? `${basePath}/${page.base}`
+            : page.base
+          : basePath;
+        collectPages(page.children, sectionBase);
+      }
+    }
+  }
+
+  collectPages(group.children, '');
+  return result;
+}
+
+/**
+ * Get previous and next page navigation for the given slug.
+ */
+export function getPageNavigation(
+  slug: string[],
+  group: Group,
+): PageNavigation {
+  const pages = flattenPages(group);
+  const currentIndex = pages.findIndex((p) => slugsEqual(p.slug, slug));
+
+  if (currentIndex === -1) {
+    return { prev: null, next: null };
+  }
+
+  return {
+    prev: currentIndex > 0 ? pages[currentIndex - 1] : null,
+    next: currentIndex < pages.length - 1 ? pages[currentIndex + 1] : null,
+  };
 }

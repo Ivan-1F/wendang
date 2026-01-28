@@ -1,5 +1,7 @@
 import { notFound } from 'next/navigation';
-import { getPage, matchSection } from '@/lib/slug';
+import { getPage, matchSection, getPageNavigation } from '@/lib/slug';
+import { PageNavigation } from '@/components/docs/page-navigation';
+import docsConfig from '@/docs.config';
 
 export default async function DocsPage({
   params,
@@ -15,8 +17,16 @@ export default async function DocsPage({
 
   const section = matchSection(slug ?? []);
 
+  // Get navigation for current page
+  const groupConfig = docsConfig.group;
+  const currentGroup =
+    'groups' in groupConfig ? groupConfig.groups[0] : null;
+  const navigation = currentGroup
+    ? getPageNavigation(slug ?? [], currentGroup)
+    : { prev: null, next: null };
+
   return (
-    <div className={'pt-10 max-w-3xl w-full mx-auto'}>
+    <div className={'py-10 max-w-3xl w-full mx-auto'}>
       <header className={'space-y-2'}>
         {section && (
           <p className={'text-sm font-semibold text-primary'}>{section}</p>
@@ -36,6 +46,8 @@ export default async function DocsPage({
       <article className={'mt-8 prose max-w-none'}>
         <MDX />
       </article>
+
+      <PageNavigation prev={navigation.prev} next={navigation.next} />
     </div>
   );
 }
