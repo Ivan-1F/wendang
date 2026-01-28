@@ -42,19 +42,15 @@ export default async function DocsPage({
         {section && (
           <p className={'text-sm font-semibold text-primary'}>{section}</p>
         )}
-        <h1 className={'text-3xl font-bold text-gray-900'}>
+        <h1 className={'text-3xl font-bold text-gray-900 dark:text-gray-200'}>
           {frontmatter.title}
         </h1>
-        <p
-          className={
-            'mt-2 text-lg max-w-none prose prose-gray dark:prose-invert'
-          }
-        >
+        <p className={'mt-2 text-lg max-w-none prose dark:prose-invert'}>
           {frontmatter.description}
         </p>
       </header>
 
-      <article className={'mt-8 prose max-w-none'}>
+      <article className={'mt-8 prose dark:prose-invert max-w-none'}>
         <MDX />
       </article>
 
