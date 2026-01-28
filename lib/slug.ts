@@ -5,7 +5,7 @@ export function pathToSlug(path: string): string[] {
   return path
     .replace(/\.mdx$/, '')
     .split('/')
-    .filter(segment => !segment.startsWith('('));
+    .filter(segment => !segment.startsWith('(') && segment !== 'index');
 }
 
 export function slugsEqual(a: string[], b: string[]): boolean {

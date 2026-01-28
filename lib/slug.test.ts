@@ -24,6 +24,10 @@ describe('pathToSlug', () => {
   test('handles path without route groups', () => {
     expect(pathToSlug('api/reference/endpoints.mdx')).toEqual(['api', 'reference', 'endpoints'])
   })
+
+  test('handles index.mdx', () => {
+    expect(pathToSlug('api/reference/index.mdx')).toEqual(['api', 'reference'])
+  })
 })
 
 describe('slugsEqual', () => {
