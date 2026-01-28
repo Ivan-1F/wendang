@@ -19,8 +19,9 @@ export function SidebarLink({
     <Link
       href={href}
       className={cn(
-        'block hover:bg-muted py-1.5 px-3 rounded-xl',
+        'block py-1.5 px-3 rounded-xl',
         { 'bg-primary/10 text-primary font-medium': pathname === href },
+        { 'hover:bg-muted': pathname !== href },
         className,
       )}
     >
