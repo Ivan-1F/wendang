@@ -6,6 +6,7 @@ const docs = mdxCollection({
   dir: 'content/docs',
   frontmatter: z.object({
     title: z.string(),
+    description: z.string().optional(),
   }),
 });
 

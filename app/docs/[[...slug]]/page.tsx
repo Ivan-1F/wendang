@@ -18,8 +18,9 @@ export default async function DocsPage({
       <h1 className={'text-3xl font-bold text-gray-900'}>
         {frontmatter.title}
       </h1>
+      <p className={'mt-2 text-lg max-w-none prose prose-gray dark:prose-invert'}>{frontmatter.description}</p>
 
-      <article className={'mt-8'}>
+      <article className={'mt-8 prose max-w-none'}>
         <MDX />
       </article>
     </div>
