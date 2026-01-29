@@ -2,6 +2,7 @@ import type { DocsConfig } from '@/lib/config';
 import { renderIcon } from '@/lib/icon';
 import { NavItem } from '@/components/docs/nav-item';
 import { ThemeSwitcher } from '@/components/theme-switcher';
+import { LanguageSelect } from '@/components/ui/language-select';
 
 const NavItems = ({ config }: { config: DocsConfig }) => {
   if (!('groups' in config.group)) {
@@ -47,7 +48,8 @@ export function Header({ config }: { config: DocsConfig }) {
           <div className={'flex items-center'}>
             <div className={'font-medium'}>{config.title}</div>
           </div>
-          <div className={'flex items-center'}>
+          <div className={'flex items-center space-x-2'}>
+            <LanguageSelect />
             <ThemeSwitcher />
           </div>
         </div>
