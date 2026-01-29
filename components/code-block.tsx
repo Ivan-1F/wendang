@@ -1,8 +1,10 @@
 'use client';
 
 import { useState, useRef, type ComponentPropsWithoutRef } from 'react';
-import { Check, icons } from 'lucide-react';
+import { Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { renderIcon } from '@/lib/icon';
+import docsConfig from '@/docs.config';
 
 function CopyIcon({ className }: { className?: string }) {
   return (
@@ -93,10 +95,8 @@ export function CodeBlock({
   // Display title if provided, otherwise show language label
   const displayLabel = title || getLabel(language);
 
-  // Get Lucide icon component by name
-  const IconComponent = iconName
-    ? icons[iconName as keyof typeof icons]
-    : null;
+  // Render icon using config's iconLoader
+  const icon = iconName ? renderIcon(iconName, docsConfig) : null;
 
   return (
     <div
@@ -110,7 +110,9 @@ export function CodeBlock({
       {/* Header */}
       <div className="flex text-gray-400 text-xs leading-6 font-medium rounded-t-[14px] pl-4 pr-2.5 py-1">
         <div className="flex-1 flex items-center gap-1.5 text-gray-700 dark:text-gray-300 min-w-0">
-          {IconComponent && <IconComponent className="w-4 h-4 shrink-0" />}
+          {icon && (
+            <span className="[&>svg]:w-4 [&>svg]:h-4 shrink-0">{icon}</span>
+          )}
           <span className="truncate">{displayLabel}</span>
         </div>
         <div className="flex items-center justify-end">
