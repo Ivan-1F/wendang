@@ -1,6 +1,6 @@
 import { docs } from 'content/docs';
 import config from '@/docs.config';
-import type { Page, Group } from '@/lib/config';
+import type { Page, Group } from '@/lib/schema';
 
 export interface FlatPage {
   href: string;

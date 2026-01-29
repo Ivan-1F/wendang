@@ -1,4 +1,4 @@
-import type { Group, Page } from '@/lib/config';
+import type { Group, Page } from '@/lib/schema';
 import { cn } from '@/lib/utils';
 import { renderIcon } from '@/lib/icon';
 import docsConfig from '@/docs.config';

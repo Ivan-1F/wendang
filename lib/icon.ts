@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import type { DocsConfig, StringOrElement } from '@/lib/config';
+import type { DocsConfig, StringOrElement } from '@/lib/schema';
 
 export const renderIcon = (
   icon: StringOrElement,

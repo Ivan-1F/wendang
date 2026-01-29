@@ -1,4 +1,4 @@
-import type { DocsConfig } from '@/lib/config';
+import type { DocsConfig } from '@/lib/schema';
 import { renderIcon } from '@/lib/icon';
 import { NavItem } from '@/components/docs/nav-item';
 import { ThemeSwitcher } from '@/components/theme-switcher';

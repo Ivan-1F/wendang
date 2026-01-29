@@ -1,7 +1,7 @@
 import type { PropsWithChildren } from 'react';
 import { Header } from '@/components/docs/header';
 import { Sidebar } from '@/components/docs/sidebar';
-import type { DocsConfig } from '@/lib/config';
+import type { DocsConfig } from '@/lib/schema';
 
 export default function DocsLayout({
   config,
