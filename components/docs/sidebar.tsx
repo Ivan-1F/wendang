@@ -1,10 +1,10 @@
 import type { Group, Page } from '@/lib/schema';
 import { cn } from '@/lib/utils';
 import { renderIcon } from '@/lib/icon';
-import docsConfig from '@/docs.config';
 import { getPage } from '@/lib/slug';
 import { connectLinks } from '@/lib/link';
 import { SidebarLink } from '@/components/docs/sidebar-link';
+import {config} from "@/lib/config";
 
 async function SidebarItem({
   page,
@@ -41,7 +41,7 @@ async function SidebarItem({
           'py-1.5': depth !== 0,
         })}
       >
-        {renderIcon(page.icon, docsConfig)}
+        {renderIcon(page.icon, await config())}
         {page.title}
       </div>
       {page.children.map((child, index) => (

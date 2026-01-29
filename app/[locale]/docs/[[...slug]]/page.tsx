@@ -6,7 +6,7 @@ import {
   pathToSlug,
 } from '@/lib/slug';
 import { PageNavigation } from '@/components/docs/page-navigation';
-import docsConfig from '@/docs.config';
+import { config } from '@/lib/config';
 import { docs } from 'content/docs';
 import { CodeBlock } from '@/components/code-block';
 
@@ -18,7 +18,7 @@ export async function generateStaticParams() {
 
 export default async function DocsPage({
   params,
-}: PageProps<'/docs/[[...slug]]'>) {
+}: PageProps<'/[locale]/docs/[[...slug]]'>) {
   const { slug } = await params;
   const page = await getPage(slug ?? []);
 
@@ -28,10 +28,10 @@ export default async function DocsPage({
 
   const { default: MDX, frontmatter } = page.compiled;
 
-  const section = matchSection(slug ?? []);
+  const section = await matchSection(slug ?? []);
 
   // Get navigation for current page
-  const groupConfig = docsConfig.navigation.group;
+  const groupConfig = (await config()).navigation.group;
   const currentGroup = 'groups' in groupConfig ? groupConfig.groups[0] : null;
   const navigation = currentGroup
     ? getPageNavigation(slug ?? [], currentGroup)

@@ -1,6 +1,6 @@
 import { docs } from 'content/docs';
-import config from '@/docs.config';
 import type { Page, Group } from '@/lib/schema';
+import { config } from '@/lib/config';
 
 export interface FlatPage {
   href: string;
@@ -41,8 +41,8 @@ export async function getPage(slug: string[]) {
  * Find the deepest section that contains the given slug.
  * Returns the section title or null if not found.
  */
-export function matchSection(slug: string[]): string | null {
-  const groupConfig = config.navigation.group;
+export async function matchSection(slug: string[]): Promise<string | null> {
+  const groupConfig = (await config()).navigation.group;
   if (!('groups' in groupConfig)) {
     return null;
   }

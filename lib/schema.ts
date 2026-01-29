@@ -66,7 +66,7 @@ const i18nConfigSchema = z.object({
   defaultLocale: z.string(),
 });
 
-const docsConfigSchema = z.object({
+export const docsConfigSchema = z.object({
   title: stringOrElementSchema.default('My App'),
   navigation: navigationConfigSchema,
   iconLoader: iconLoaderSchema.optional(),

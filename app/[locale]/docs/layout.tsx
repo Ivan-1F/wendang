@@ -1,6 +1,8 @@
 import DocsLayout from '@/components/docs/layout';
-import docsConfig from '@/docs.config';
+import { config } from '@/lib/config';
 
-export default function Layout({ children }: LayoutProps<'/docs'>) {
-  return <DocsLayout config={docsConfig}>{children}</DocsLayout>;
+export default async function Layout({
+  children,
+}: LayoutProps<'/[locale]/docs'>) {
+  return <DocsLayout config={await config()}>{children}</DocsLayout>;
 }
