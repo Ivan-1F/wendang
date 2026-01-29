@@ -8,6 +8,7 @@ import {
 import { PageNavigation } from '@/components/docs/page-navigation';
 import docsConfig from '@/docs.config';
 import { docs } from 'content/docs';
+import { CodeBlock } from '@/components/code-block';
 
 export async function generateStaticParams() {
   return docs.list().map((page) => ({
@@ -51,7 +52,7 @@ export default async function DocsPage({
       </header>
 
       <article className={'mt-8 prose dark:prose-invert max-w-none'}>
-        <MDX />
+        <MDX components={{ pre: CodeBlock }} />
       </article>
 
       <PageNavigation prev={navigation.prev} next={navigation.next} />
