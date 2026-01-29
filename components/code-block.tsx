@@ -101,55 +101,50 @@ export function CodeBlock({
   return (
     <div
       className={cn(
-        'not-prose my-5 rounded-2xl relative group p-0.5',
+        'not-prose my-4 rounded-lg relative group',
         'text-gray-950 bg-gray-50 border border-gray-950/10',
         'dark:text-gray-50 dark:bg-white/5 dark:border-white/10',
         hasLineNumbers && 'code-with-line-numbers',
       )}
     >
       {/* Header */}
-      <div className="flex text-gray-400 text-xs leading-6 font-medium rounded-t-[14px] pl-4 pr-2.5 py-1">
-        <div className="flex-1 flex items-center gap-1.5 text-gray-700 dark:text-gray-300 min-w-0">
+      <div className="flex items-center justify-between text-xs font-medium px-3 py-1.5 border-b border-gray-950/5 dark:border-white/5">
+        <div className="flex items-center gap-1.5 text-gray-500 dark:text-gray-400 min-w-0">
           {icon && (
-            <span className="[&>svg]:w-4 [&>svg]:h-4 shrink-0">{icon}</span>
+            <span className="[&>svg]:w-3.5 [&>svg]:h-3.5 shrink-0">{icon}</span>
           )}
           <span className="truncate">{displayLabel}</span>
         </div>
-        <div className="flex items-center justify-end">
-          <div className="relative select-none">
-            <button
-              onClick={handleCopy}
-              type="button"
-              className="group/copy-button h-6.5 w-6.5 flex items-center justify-center rounded-md backdrop-blur"
-              aria-label={copied ? 'Copied' : 'Copy code'}
-            >
-              {copied ? (
-                <Check className="w-4 h-4 text-green-500" />
-              ) : (
-                <CopyIcon className="w-4 h-4 text-gray-400 group-hover/copy-button:text-gray-500 dark:text-white/40 dark:group-hover/copy-button:text-white/60" />
-              )}
-            </button>
-          </div>
-        </div>
+        <button
+          onClick={handleCopy}
+          type="button"
+          className="p-1 -mr-1 rounded hover:bg-gray-200/50 dark:hover:bg-white/10 transition-colors"
+          aria-label={copied ? 'Copied' : 'Copy code'}
+        >
+          {copied ? (
+            <Check className="w-3.5 h-3.5 text-green-500" />
+          ) : (
+            <CopyIcon className="w-3.5 h-3.5 text-gray-400 dark:text-gray-500" />
+          )}
+        </button>
       </div>
 
       {/* Code area */}
       <div
         className={cn(
-          'w-0 min-w-full max-w-full py-3.5 px-4',
-          'text-sm leading-6 font-mono',
-          'bg-white dark:bg-[#282A36] rounded-xl',
+          'w-0 min-w-full max-w-full py-3 px-3',
+          'text-[13px] leading-relaxed font-mono',
           'overflow-x-auto',
           'scrollbar-thin scrollbar-thumb-rounded',
-          'scrollbar-thumb-black/15 hover:scrollbar-thumb-black/20',
-          'dark:scrollbar-thumb-white/20 dark:hover:scrollbar-thumb-white/25',
+          'scrollbar-thumb-black/10 hover:scrollbar-thumb-black/15',
+          'dark:scrollbar-thumb-white/15 dark:hover:scrollbar-thumb-white/20',
         )}
         style={{ fontVariantLigatures: 'none' }}
       >
         <pre
           ref={preRef}
           className={cn(
-            'my-0! bg-transparent! shadow-none! p-0! leading-6',
+            'my-0! bg-transparent! shadow-none! p-0!',
             '[&>code]:bg-transparent [&>code]:p-0',
             '**:ring-0 **:outline-0',
             className,
