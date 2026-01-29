@@ -51,10 +51,27 @@ const navigationConfigSchema = z.object({
   group: z.union([groupConfigSchema, singleGroupConfigSchema]),
 });
 
+const localesConfigSchema = z.record(
+  z.string(),
+  z.object({
+    label: z.string(),
+    get config() {
+      return docsConfigSchema.omit({ i18n: true }).partial().optional();
+    },
+  }),
+);
+
+const i18nConfigSchema = z.object({
+  locales: localesConfigSchema,
+  defaultLocale: z.string(),
+});
+
 const docsConfigSchema = z.object({
   title: stringOrElementSchema.default('My App'),
   navigation: navigationConfigSchema,
   iconLoader: iconLoaderSchema.optional(),
+
+  i18n: i18nConfigSchema.optional(),
 });
 
 export type DocsConfig = z.infer<typeof docsConfigSchema>;

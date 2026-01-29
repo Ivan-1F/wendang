@@ -1,4 +1,5 @@
 import { createContent } from 'fuma-content/next';
+import createNextIntlPlugin from 'next-intl/plugin';
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -6,5 +7,6 @@ const nextConfig = {
 };
 
 const withContent = await createContent();
+const withNextIntl = createNextIntlPlugin();
 
-export default withContent(nextConfig);
+export default withNextIntl(withContent(nextConfig));

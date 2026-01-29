@@ -1,3 +1,6 @@
+'use client';
+
+import { useLocale } from 'use-intl';
 import {
   Select,
   SelectContent,
@@ -6,6 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { useRouter, usePathname } from '@/i18n/navigation';
 
 const items = [
   { label: '简体中文', value: 'cn' },
@@ -13,9 +17,21 @@ const items = [
 ];
 
 export const LanguageSelect = () => {
+  const locale = useLocale();
+  const pathname = usePathname();
+  const router = useRouter();
+
   return (
-    <Select items={items} value={'cn'}>
-      <SelectTrigger className={'max-w-48 w-full'}>
+    <Select
+      items={items}
+      value={locale}
+      onValueChange={(value) => {
+        if (value) {
+          router.replace(pathname, { locale: value });
+        }
+      }}
+    >
+      <SelectTrigger className={'w-38'}>
         <SelectValue />
       </SelectTrigger>
       <SelectContent alignItemWithTrigger>

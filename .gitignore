@@ -48,4 +48,5 @@ next-env.d.ts
 
 # dev
 docs.config.tsx
+docs.*.config.tsx
 /content
