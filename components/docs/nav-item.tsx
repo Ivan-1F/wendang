@@ -21,7 +21,7 @@ export function NavItem({
     <Link
       href={href}
       className={cn('relative h-full flex items-center gap-2 [&>svg]:size-4', {
-        'text-primary': active,
+        'text-primary font-semibold': active,
       })}
     >
       {icon}
