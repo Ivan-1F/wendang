@@ -5,14 +5,14 @@ import { ThemeSwitcher } from '@/components/theme-switcher';
 import { LanguageSelect } from '@/components/ui/language-select';
 
 const NavItems = ({ config }: { config: DocsConfig }) => {
-  if (!('groups' in config.group)) {
+  if (!('groups' in config.navigation.group)) {
     return null;
   }
 
   return (
     <div className={'flex items-center h-10 justify-between'}>
       <div className={'flex items-center h-full gap-6'}>
-        {config.group.groups
+        {config.navigation.group.groups
           .filter((group) => group.align === 'leading')
           .map((group, index) => (
             <NavItem
@@ -24,7 +24,7 @@ const NavItems = ({ config }: { config: DocsConfig }) => {
           ))}
       </div>
       <div className={'flex items-center h-full gap-6'}>
-        {config.group.groups
+        {config.navigation.group.groups
           .filter((group) => group.align === 'trailing')
           .map((group, index) => (
             <NavItem

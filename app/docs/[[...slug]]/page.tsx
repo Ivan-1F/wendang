@@ -31,7 +31,7 @@ export default async function DocsPage({
   const section = matchSection(slug ?? []);
 
   // Get navigation for current page
-  const groupConfig = docsConfig.group;
+  const groupConfig = docsConfig.navigation.group;
   const currentGroup = 'groups' in groupConfig ? groupConfig.groups[0] : null;
   const navigation = currentGroup
     ? getPageNavigation(slug ?? [], currentGroup)

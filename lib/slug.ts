@@ -42,7 +42,7 @@ export async function getPage(slug: string[]) {
  * Returns the section title or null if not found.
  */
 export function matchSection(slug: string[]): string | null {
-  const groupConfig = config.group;
+  const groupConfig = config.navigation.group;
   if (!('groups' in groupConfig)) {
     return null;
   }

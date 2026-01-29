@@ -47,9 +47,13 @@ const singleGroupConfigSchema = z
   })
   .strict();
 
+const navigationConfigSchema = z.object({
+  group: z.union([groupConfigSchema, singleGroupConfigSchema]),
+});
+
 const docsConfigSchema = z.object({
   title: stringOrElementSchema.default('My App'),
-  group: z.union([groupConfigSchema, singleGroupConfigSchema]),
+  navigation: navigationConfigSchema,
   iconLoader: iconLoaderSchema.optional(),
 });
 
