@@ -17,6 +17,8 @@ const metaTransformer: ShikiTransformer = {
     const metaString = (this.options.meta as { __raw?: string })?.__raw || '';
     const titleMatch = metaString.match(/title="([^"]+)"/);
     if (titleMatch) node.properties['data-title'] = titleMatch[1];
+    const iconMatch = metaString.match(/icon="([^"]+)"/);
+    if (iconMatch) node.properties['data-icon'] = iconMatch[1];
     if (metaString.includes('lineNumbers')) {
       node.properties['data-line-numbers'] = 'true';
     }

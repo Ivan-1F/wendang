@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef, type ComponentPropsWithoutRef } from 'react';
-import { Check } from 'lucide-react';
+import { Check, icons } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 function CopyIcon({ className }: { className?: string }) {
@@ -78,6 +78,7 @@ export function CodeBlock({
   const language =
     (props as { 'data-language'?: string })['data-language'] || 'text';
   const title = (props as { 'data-title'?: string })['data-title'];
+  const iconName = (props as { 'data-icon'?: string })['data-icon'];
   const hasLineNumbers =
     (props as { 'data-line-numbers'?: string })['data-line-numbers'] === 'true';
 
@@ -92,6 +93,11 @@ export function CodeBlock({
   // Display title if provided, otherwise show language label
   const displayLabel = title || getLabel(language);
 
+  // Get Lucide icon component by name
+  const IconComponent = iconName
+    ? icons[iconName as keyof typeof icons]
+    : null;
+
   return (
     <div
       className={cn(
@@ -104,6 +110,7 @@ export function CodeBlock({
       {/* Header */}
       <div className="flex text-gray-400 text-xs leading-6 font-medium rounded-t-[14px] pl-4 pr-2.5 py-1">
         <div className="flex-1 flex items-center gap-1.5 text-gray-700 dark:text-gray-300 min-w-0">
+          {IconComponent && <IconComponent className="w-4 h-4 shrink-0" />}
           <span className="truncate">{displayLabel}</span>
         </div>
         <div className="flex items-center justify-end">
