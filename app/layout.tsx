@@ -26,7 +26,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning className={inter.variable}>
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={`${inter.variable} scroll-pt-28`}
+    >
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
