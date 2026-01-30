@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation';
+import { setRequestLocale } from 'next-intl/server';
 import {
   getPage,
   matchSection,
@@ -9,17 +10,26 @@ import { PageNavigation } from '@/components/docs/page-navigation';
 import { config } from '@/lib/config';
 import { docs } from 'content/docs';
 import { CodeBlock } from '@/components/code-block';
+import { routing } from '@/i18n/routing';
 
 export async function generateStaticParams() {
-  return docs.list().map((page) => ({
-    slug: pathToSlug(page.path),
-  }));
+  const locales = routing().locales;
+  const pages = docs.list();
+
+  return locales.flatMap((locale) =>
+    pages.map((page) => ({
+      locale,
+      slug: pathToSlug(page.path),
+    }))
+  );
 }
 
 export default async function DocsPage({
   params,
 }: PageProps<'/[locale]/docs/[[...slug]]'>) {
-  const { slug } = await params;
+  const { slug, locale } = await params;
+  setRequestLocale(locale);
+
   const page = await getPage(slug ?? []);
 
   if (!page) {

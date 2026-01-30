@@ -4,7 +4,7 @@ import { renderIcon } from '@/lib/icon';
 import { getPage } from '@/lib/slug';
 import { connectLinks } from '@/lib/link';
 import { SidebarLink } from '@/components/docs/sidebar-link';
-import {config} from "@/lib/config";
+import { config } from '@/lib/config';
 
 async function SidebarItem({
   page,
