@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { setRequestLocale } from 'next-intl/server';
 import {
@@ -24,6 +25,23 @@ export async function generateStaticParams() {
       slug: pathToSlug(page.path),
     })),
   );
+}
+
+export async function generateMetadata({
+  params,
+}: PageProps<'/[locale]/docs/[[...slug]]'>): Promise<Metadata> {
+  const { slug, locale } = await params;
+  setRequestLocale(locale);
+
+  const page = await getPage(slug ?? [], locale);
+
+  if (!page) {
+    notFound();
+  }
+
+  return {
+    title: page.compiled.frontmatter.title,
+  };
 }
 
 export default async function DocsPage({
