@@ -25,7 +25,7 @@ export function slugsEqual(a: string[], b: string[]): boolean {
 }
 
 export async function getPage(slug: string[]) {
-  const pages = await docs.list();
+  const pages = docs.list();
 
   for (const page of pages) {
     const pageSlug = pathToSlug(page.path);
