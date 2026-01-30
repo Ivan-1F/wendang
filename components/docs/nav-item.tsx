@@ -20,12 +20,12 @@ export function NavItem({
   return (
     <Link
       href={href}
-      className={cn('relative h-full flex items-center gap-2 [&>svg]:size-4', {
+      className={cn('relative h-full flex items-center gap-2 [&>svg]:size-4 font-medium', {
         'text-primary font-semibold': active,
       })}
     >
       {icon}
-      <span className={'text-sm font-medium'}>{title}</span>
+      <span className={'text-sm'}>{title}</span>
       <div
         className={cn('absolute z-10 bottom-0 w-full left-0 h-px', {
           'bg-primary': active,
