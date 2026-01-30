@@ -8,6 +8,7 @@ import { defineConfig } from 'fuma-content/config';
 import remarkGfm from 'remark-gfm';
 import type { ShikiTransformer } from 'shiki';
 import z from 'zod';
+import { remarkHeading } from 'fumadocs-core/mdx-plugins';
 
 const metaTransformer: ShikiTransformer = {
   name: 'meta-to-data-attrs',
@@ -31,9 +32,11 @@ const docs = mdxCollection({
     title: z.string(),
     description: z.string().optional(),
   }),
-
+  postprocess: {
+    valueToExport: ['toc'],
+  },
   options: () => ({
-    remarkPlugins: [remarkGfm],
+    remarkPlugins: [remarkGfm, remarkHeading],
     rehypePlugins: [
       [
         rehypeShiki,

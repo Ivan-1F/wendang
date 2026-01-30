@@ -11,6 +11,8 @@ import { config } from '@/lib/config';
 import { docs } from 'content/docs';
 import { CodeBlock } from '@/components/code-block';
 import { routing } from '@/i18n/routing';
+import { TOCSidebar } from '@/components/docs/toc-sidebar';
+import type { TableOfContents } from '@/lib/toc';
 
 export async function generateStaticParams() {
   const locales = routing().locales;
@@ -36,7 +38,11 @@ export default async function DocsPage({
     notFound();
   }
 
-  const { default: MDX, frontmatter } = page.compiled;
+  const {
+    default: MDX,
+    frontmatter,
+    toc = [],
+  } = page.compiled as typeof page.compiled & { toc?: TableOfContents };
 
   const section = await matchSection(slug ?? []);
 
@@ -48,24 +54,27 @@ export default async function DocsPage({
     : { prev: null, next: null };
 
   return (
-    <div className={'py-10 max-w-3xl w-full mx-auto'}>
-      <header className={'space-y-2'}>
-        {section && (
-          <p className={'text-sm font-semibold text-primary'}>{section}</p>
-        )}
-        <h1 className={'text-3xl font-bold text-gray-900 dark:text-gray-200'}>
-          {frontmatter.title}
-        </h1>
-        <p className={'mt-2 text-lg max-w-none prose dark:prose-invert'}>
-          {frontmatter.description}
-        </p>
-      </header>
+    <div className="flex flex-1 gap-12 justify-center py-10 pl-22">
+      <div className="max-w-3xl w-full">
+        <header className="space-y-2">
+          {section && (
+            <p className="text-sm font-semibold text-primary">{section}</p>
+          )}
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-200">
+            {frontmatter.title}
+          </h1>
+          <p className="mt-2 text-lg max-w-none prose dark:prose-invert">
+            {frontmatter.description}
+          </p>
+        </header>
 
-      <article className={'mt-8 prose dark:prose-invert max-w-none'}>
-        <MDX components={{ pre: CodeBlock }} />
-      </article>
+        <article className="mt-8 prose dark:prose-invert max-w-none">
+          <MDX components={{ pre: CodeBlock }} />
+        </article>
 
-      <PageNavigation prev={navigation.prev} next={navigation.next} />
+        <PageNavigation prev={navigation.prev} next={navigation.next} />
+      </div>
+      <TOCSidebar items={toc} />
     </div>
   );
 }
