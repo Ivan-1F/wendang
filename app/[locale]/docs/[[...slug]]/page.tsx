@@ -54,8 +54,8 @@ export default async function DocsPage({
     : { prev: null, next: null };
 
   return (
-    <div className="flex flex-1 gap-12 justify-center py-10 pl-22">
-      <div className="max-w-3xl w-full">
+    <div className="flex flex-1 gap-12 justify-center py-10 lg:pl-22">
+      <div className="grow">
         <header className="space-y-2">
           {section && (
             <p className="text-sm font-semibold text-primary">{section}</p>
