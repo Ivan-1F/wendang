@@ -20,7 +20,7 @@ export async function generateStaticParams() {
     pages.map((page) => ({
       locale,
       slug: pathToSlug(page.path),
-    }))
+    })),
   );
 }
 
@@ -30,7 +30,7 @@ export default async function DocsPage({
   const { slug, locale } = await params;
   setRequestLocale(locale);
 
-  const page = await getPage(slug ?? []);
+  const page = await getPage(slug ?? [], locale);
 
   if (!page) {
     notFound();

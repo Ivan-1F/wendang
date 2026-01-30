@@ -5,6 +5,7 @@ import { getPage } from '@/lib/slug';
 import { connectLinks } from '@/lib/link';
 import { SidebarLink } from '@/components/docs/sidebar-link';
 import { config } from '@/lib/config';
+import { getLocale } from 'next-intl/server';
 
 async function SidebarItem({
   page,
@@ -22,6 +23,7 @@ async function SidebarItem({
 
     const pageData = await getPage(
       href.replace('/docs', '').split('/').filter(Boolean),
+      await getLocale(),
     );
 
     return (

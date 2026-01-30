@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { getPage, type FlatPage } from '@/lib/slug';
+import { getLocale } from 'next-intl/server';
 
 interface PageNavigationProps {
   prev: FlatPage | null;
@@ -14,7 +15,7 @@ async function NavButton({
   page: FlatPage;
   direction: 'prev' | 'next';
 }) {
-  const pageData = await getPage(page.slug);
+  const pageData = await getPage(page.slug, await getLocale());
   const title = pageData?.compiled.frontmatter.title ?? page.slug.join('/');
 
   return (

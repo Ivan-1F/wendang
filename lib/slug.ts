@@ -24,7 +24,7 @@ export function slugsEqual(a: string[], b: string[]): boolean {
   return a.length === b.length && a.every((v, i) => v === b[i]);
 }
 
-export async function getPage(slug: string[]) {
+const getPageBySlug = (slug: string[]) => {
   const pages = docs.list();
 
   for (const page of pages) {
@@ -35,6 +35,22 @@ export async function getPage(slug: string[]) {
   }
 
   return undefined;
+};
+
+export async function getPage(slug: string[], locale?: string) {
+  const i18n = await config().then((config) => config.i18n);
+
+  if (!i18n || !locale) {
+    return getPageBySlug(slug);
+  }
+
+  const localePage = getPageBySlug([locale, ...slug]);
+
+  if (localePage) {
+    return localePage;
+  }
+
+  return getPageBySlug([i18n.defaultLocale, ...slug]);
 }
 
 /**
