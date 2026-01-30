@@ -10,16 +10,22 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { useRouter, usePathname } from '@/i18n/navigation';
-
-const items = [
-  { label: '简体中文', value: 'cn' },
-  { label: 'English', value: 'en' },
-];
+import { useConfig } from '@/lib/use-config';
 
 export const LanguageSelect = () => {
   const locale = useLocale();
   const pathname = usePathname();
   const router = useRouter();
+
+  const config = useConfig();
+
+  if (!config.i18n) {
+    return null;
+  }
+
+  const items = Object.entries(config.i18n.locales).map(
+    ([value, { label }]) => ({ value, label }),
+  );
 
   return (
     <Select
