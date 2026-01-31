@@ -1,7 +1,7 @@
 import docsConfig from '@/docs.config';
 import { docsConfigSchema } from '@/lib/schema';
 import { merge } from 'ts-deepmerge';
-import { useLocale } from 'use-intl';
+import { useLocale } from 'next-intl';
 
 // TODO: extract common part with config()
 export const useConfig = () => {
