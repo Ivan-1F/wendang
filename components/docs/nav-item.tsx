@@ -9,17 +9,22 @@ export function NavItem({
   icon,
   title,
   href,
-  exact,
+  allLinks,
 }: {
   icon?: ReactNode;
   title: string;
   href: string;
-  exact?: boolean;
+  allLinks: string[];
 }) {
   const pathname = usePathname();
-  const active = exact
-    ? pathname === href
-    : pathname === href || pathname.startsWith(`${href}/`);
+
+  // Find the longest matching link
+  const activeHref =
+    allLinks
+      .filter((link) => pathname === link || pathname.startsWith(`${link}/`))
+      .sort((a, b) => b.length - a.length)[0] ?? null;
+
+  const active = href === activeHref;
 
   return (
     <Link

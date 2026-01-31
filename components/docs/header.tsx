@@ -23,7 +23,7 @@ const NavItems = ({ config }: { config: DocsConfig }) => {
               title={group.title}
               href={group.link}
               icon={renderIcon(group.icon, config)}
-              exact={allLinks.some((link) => link !== group.link && link.startsWith(`${group.link}/`))}
+              allLinks={allLinks}
             />
           ))}
       </div>
@@ -36,7 +36,7 @@ const NavItems = ({ config }: { config: DocsConfig }) => {
               title={group.title}
               href={group.link}
               icon={renderIcon(group.icon, config)}
-              exact={allLinks.some((link) => link !== group.link && link.startsWith(`${group.link}/`))}
+              allLinks={allLinks}
             />
           ))}
       </div>
