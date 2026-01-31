@@ -67,7 +67,13 @@ export default async function DocsPage({
 
   // Get navigation for current page
   const groupConfig = (await config()).navigation.group;
-  const currentGroup = 'groups' in groupConfig ? groupConfig.groups[0] : null;
+  const pathname = `/docs/${(slug ?? []).join('/')}`;
+  const currentGroup =
+    'groups' in groupConfig
+      ? groupConfig.groups
+          .filter((g) => pathname === g.link || pathname.startsWith(`${g.link}/`))
+          .sort((a, b) => b.link.length - a.link.length)[0] ?? null
+      : null;
   const navigation = currentGroup
     ? getPageNavigation(slug ?? [], currentGroup)
     : { prev: null, next: null };
