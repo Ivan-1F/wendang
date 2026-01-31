@@ -9,13 +9,17 @@ export function NavItem({
   icon,
   title,
   href,
+  exact,
 }: {
   icon?: ReactNode;
   title: string;
   href: string;
+  exact?: boolean;
 }) {
   const pathname = usePathname();
-  const active = pathname.startsWith(href);
+  const active = exact
+    ? pathname === href
+    : pathname === href || pathname.startsWith(`${href}/`);
 
   return (
     <Link

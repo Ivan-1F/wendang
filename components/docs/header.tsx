@@ -9,10 +9,13 @@ const NavItems = ({ config }: { config: DocsConfig }) => {
     return null;
   }
 
+  const groups = config.navigation.group.groups;
+  const allLinks = groups.map((g) => g.link);
+
   return (
     <div className={'flex items-center h-10 justify-between'}>
       <div className={'flex items-center h-full gap-6'}>
-        {config.navigation.group.groups
+        {groups
           .filter((group) => group.align === 'leading')
           .map((group, index) => (
             <NavItem
@@ -20,11 +23,12 @@ const NavItems = ({ config }: { config: DocsConfig }) => {
               title={group.title}
               href={group.link}
               icon={renderIcon(group.icon, config)}
+              exact={allLinks.some((link) => link !== group.link && link.startsWith(`${group.link}/`))}
             />
           ))}
       </div>
       <div className={'flex items-center h-full gap-6'}>
-        {config.navigation.group.groups
+        {groups
           .filter((group) => group.align === 'trailing')
           .map((group, index) => (
             <NavItem
@@ -32,6 +36,7 @@ const NavItems = ({ config }: { config: DocsConfig }) => {
               title={group.title}
               href={group.link}
               icon={renderIcon(group.icon, config)}
+              exact={allLinks.some((link) => link !== group.link && link.startsWith(`${group.link}/`))}
             />
           ))}
       </div>
