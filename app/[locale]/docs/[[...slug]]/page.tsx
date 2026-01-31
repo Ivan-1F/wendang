@@ -14,6 +14,7 @@ import { CodeBlock } from '@/components/code-block';
 import { routing } from '@/i18n/routing';
 import { TOCSidebar } from '@/components/docs/toc-sidebar';
 import type { TableOfContents } from '@/lib/toc';
+import { cn } from '@/lib/utils';
 
 export async function generateStaticParams() {
   const locales = routing().locales;
@@ -72,7 +73,12 @@ export default async function DocsPage({
     : { prev: null, next: null };
 
   return (
-    <div className="flex flex-1 gap-12 justify-center py-10 lg:pl-18">
+    <div
+      className={cn(
+        'flex flex-1 gap-12 justify-center py-10 lg:pl-6 max-w-3xl mx-auto',
+        { 'lg:pl-18 max-w-6xl': toc.length !== 0 },
+      )}
+    >
       <div className="grow">
         <header className="space-y-2">
           {section && (

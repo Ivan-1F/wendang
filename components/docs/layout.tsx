@@ -10,7 +10,7 @@ export default function DocsLayout({
   return (
     <div>
       <Header config={config} />
-      <main className={'flex px-6'}>
+      <main className={'flex w-full px-6 lg:pr-9'}>
         {/* @ts-expect-error: TODO */}
         <Sidebar group={config.navigation.group.groups[0]} />
         {children}
