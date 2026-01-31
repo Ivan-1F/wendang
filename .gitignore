@@ -46,6 +46,9 @@ next-env.d.ts
 # fuma-content
 .content
 
+# turbo
+.turbo
+
 # dev
 docs.config.tsx
 docs.*.config.tsx
