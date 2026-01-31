@@ -76,7 +76,7 @@ export default async function DocsPage({
     <div
       className={cn(
         'flex flex-1 gap-12 justify-center py-10 lg:pl-6 max-w-3xl mx-auto',
-        { 'lg:pl-18 max-w-6xl': toc.length !== 0 },
+        { 'xl:pl-18 max-w-6xl': toc.length !== 0 },
       )}
     >
       <div className="grow">
