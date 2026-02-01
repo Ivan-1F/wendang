@@ -3,6 +3,8 @@
 @import "shadcn/tailwind.css";
 
 @source "../content/**/*.mdx";
+@source "../docs.config.tsx";
+@source "../docs.*.config.tsx";
 
 @plugin "@tailwindcss/typography";
 
