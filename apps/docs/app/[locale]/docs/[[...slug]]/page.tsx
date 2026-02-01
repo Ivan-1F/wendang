@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { setRequestLocale } from 'next-intl/server';
 import {
@@ -102,7 +103,20 @@ export default async function DocsPage({
         </header>
 
         <article className="mt-8 prose dark:prose-invert max-w-none">
-          <MDX components={{ pre: CodeBlock, Card }} />
+          <MDX
+            components={{
+              pre: CodeBlock,
+              Card,
+              img: (props) => (
+                <Image
+                  {...props}
+                  alt={props.alt}
+                  sizes={'(max-width: 768px) 100vw, 768px'}
+                  className={'rounded-lg'}
+                />
+              ),
+            }}
+          />
         </article>
 
         <PageNavigation prev={navigation.prev} next={navigation.next} />
