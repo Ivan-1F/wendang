@@ -15,6 +15,7 @@ import { routing } from '@/i18n/routing';
 import { TOCSidebar } from '@/components/docs/toc-sidebar';
 import type { TableOfContents } from '@/lib/toc';
 import { cn } from '@/lib/utils';
+import { Card } from '@/components/docs/prelude/card';
 
 export async function generateStaticParams() {
   const locales = routing().locales;
@@ -70,9 +71,11 @@ export default async function DocsPage({
   const pathname = `/docs/${(slug ?? []).join('/')}`;
   const currentGroup =
     'groups' in groupConfig
-      ? groupConfig.groups
-          .filter((g) => pathname === g.link || pathname.startsWith(`${g.link}/`))
-          .sort((a, b) => b.link.length - a.link.length)[0] ?? null
+      ? (groupConfig.groups
+          .filter(
+            (g) => pathname === g.link || pathname.startsWith(`${g.link}/`),
+          )
+          .sort((a, b) => b.link.length - a.link.length)[0] ?? null)
       : null;
   const navigation = currentGroup
     ? getPageNavigation(slug ?? [], currentGroup)
@@ -99,7 +102,7 @@ export default async function DocsPage({
         </header>
 
         <article className="mt-8 prose dark:prose-invert max-w-none">
-          <MDX components={{ pre: CodeBlock }} />
+          <MDX components={{ pre: CodeBlock, Card }} />
         </article>
 
         <PageNavigation prev={navigation.prev} next={navigation.next} />
