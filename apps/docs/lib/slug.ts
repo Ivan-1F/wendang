@@ -84,6 +84,16 @@ export async function matchSection(slug: string[]): Promise<string | null> {
     return null;
   }
 
+  // Calculate the relative slug path within the group (strip group prefix)
+  const linkPath = matchingGroup.link.replace(/^\/docs\/?/, '');
+  const relativeSlugPath = linkPath
+    ? slugPath.startsWith(`${linkPath}/`)
+      ? slugPath.slice(linkPath.length + 1)
+      : slugPath === linkPath
+        ? ''
+        : slugPath
+    : slugPath;
+
   // Recursively search for the deepest matching section
   function findSection(pages: Page[], basePath: string): string | null {
     let result: string | null = null;
@@ -110,7 +120,7 @@ export async function matchSection(slug: string[]): Promise<string | null> {
               : sectionBase
                 ? `${sectionBase}/${child}`
                 : child;
-          return childPath === slugPath;
+          return childPath === relativeSlugPath;
         }
         return false;
       });
@@ -129,7 +139,35 @@ export async function matchSection(slug: string[]): Promise<string | null> {
     return result;
   }
 
-  return findSection(matchingGroup.children, '');
+  const sectionResult = findSection(matchingGroup.children, '');
+  if (sectionResult) {
+    return sectionResult;
+  }
+
+  // If no section matched, check if the page is directly in the group's children
+  // (not nested in a section). If so, return the group's title.
+  function isDirectChild(pages: Page[], basePath: string): boolean {
+    for (const page of pages) {
+      if (typeof page === 'string') {
+        const childPath =
+          page === '.'
+            ? basePath
+            : basePath
+              ? `${basePath}/${page}`
+              : page;
+        if (childPath === relativeSlugPath) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  if (isDirectChild(matchingGroup.children, '')) {
+    return matchingGroup.title;
+  }
+
+  return null;
 }
 
 /**
