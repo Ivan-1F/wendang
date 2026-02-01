@@ -3,8 +3,15 @@ import { renderIcon } from '@/lib/icon';
 import { NavItem } from '@/components/docs/nav-item';
 import { ThemeSwitcher } from '@/components/theme-switcher';
 import { LanguageSelect } from '@/components/language-select';
+import { cn } from '@/lib/utils';
 
-const NavItems = ({ config }: { config: DocsConfig }) => {
+const NavItems = ({
+  config,
+  className,
+}: {
+  config: DocsConfig;
+  className?: string;
+}) => {
   if (!('groups' in config.navigation.group)) {
     return null;
   }
@@ -13,7 +20,7 @@ const NavItems = ({ config }: { config: DocsConfig }) => {
   const allLinks = groups.map((g) => g.link);
 
   return (
-    <div className={'flex items-center h-10 justify-between'}>
+    <div className={cn('flex items-center h-10 justify-between', className)}>
       <div className={'flex items-center h-full gap-6'}>
         {groups
           .filter((group) => group.align === 'leading')
