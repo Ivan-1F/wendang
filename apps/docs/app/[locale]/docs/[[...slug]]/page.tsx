@@ -115,6 +115,14 @@ export default async function DocsPage({
                   className={'rounded-lg'}
                 />
               ),
+              a: (props) => (
+                <a
+                  {...props}
+                  className={
+                    'underline decoration-primary decoration-1 underline-offset-4 hover:decoration-2 transition-all'
+                  }
+                />
+              ),
             }}
           />
         </article>
