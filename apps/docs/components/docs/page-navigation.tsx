@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { getPage, type FlatPage } from '@/lib/slug';
 import { getLocale } from 'next-intl/server';
+import { cn } from '@/lib/utils';
 
 interface PageNavigationProps {
   prev: FlatPage | null;
@@ -21,17 +22,17 @@ async function NavButton({
   return (
     <Link
       href={page.href}
-      className={
-        'group flex flex-col gap-0.5 px-3 py-2 h-full rounded-lg border hover:border-primary transition-colors ' +
-        (direction === 'next' ? 'items-end text-right' : 'items-start')
-      }
+      className={cn(
+        'group flex flex-col gap-0.5 px-3 py-2 h-full rounded-lg border hover:border-primary',
+        direction === 'next' ? 'items-end text-right' : 'items-start',
+      )}
     >
       <span className="text-xs text-muted-foreground flex items-center gap-1">
         {direction === 'prev' && <ChevronLeft className="w-3 h-3" />}
         {direction === 'prev' ? 'Previous' : 'Next'}
         {direction === 'next' && <ChevronRight className="w-3 h-3" />}
       </span>
-      <span className="text-sm font-medium group-hover:text-primary transition-colors">
+      <span className="text-sm font-medium">
         {title}
       </span>
     </Link>
