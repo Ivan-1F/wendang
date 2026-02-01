@@ -138,6 +138,11 @@ export async function matchSection(slug: string[]): Promise<string | null> {
 export function flattenPages(group: Group): FlatPage[] {
   const result: FlatPage[] = [];
   const baseLink = group.link.replace(/\/$/, '');
+  // Extract group path prefix from link (e.g., "/docs/guides" -> ["guides"])
+  const groupPrefix = baseLink
+    .replace(/^\/docs\/?/, '')
+    .split('/')
+    .filter(Boolean);
 
   function collectPages(pages: Page[], basePath: string): void {
     for (const page of pages) {
@@ -146,7 +151,8 @@ export function flattenPages(group: Group): FlatPage[] {
         const pagePath =
           page === '.' ? basePath : basePath ? `${basePath}/${page}` : page;
         const href = pagePath ? `${baseLink}/${pagePath}` : baseLink;
-        const slug = pagePath ? pagePath.split('/') : [];
+        const pageSegments = pagePath ? pagePath.split('/') : [];
+        const slug = [...groupPrefix, ...pageSegments];
         result.push({ href, slug });
       } else {
         // Section with children - recurse
