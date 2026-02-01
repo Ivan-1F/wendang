@@ -65,7 +65,7 @@ export function Header({ config }: { config: DocsConfig }) {
             <ThemeSwitcher />
           </div>
         </div>
-        <NavItems config={config} />
+        <NavItems config={config} className={'hidden lg:flex'} />
       </div>
       <div className={'absolute z-0 bottom-0 bg-border w-full h-px'}></div>
     </nav>
