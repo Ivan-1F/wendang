@@ -2,7 +2,7 @@ import type { DocsConfig } from '@/lib/schema';
 import { renderIcon } from '@/lib/icon';
 import { NavItem } from '@/components/docs/nav-item';
 import { ThemeSwitcher } from '@/components/theme-switcher';
-import { LanguageSelect } from '@/components/ui/language-select';
+import { LanguageSelect } from '@/components/language-select';
 
 const NavItems = ({ config }: { config: DocsConfig }) => {
   if (!('groups' in config.navigation.group)) {
