@@ -1,0 +1,108 @@
+'use client';
+
+import { useState, useEffect, useRef } from 'react';
+import { ChevronDownIcon, AlignJustifyIcon } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import type { TOCProps, TableOfContents } from '@/lib/toc';
+import {
+  AnchorProvider,
+  ScrollProvider,
+  TOCItem,
+} from 'fumadocs-core/toc';
+
+function useActiveItem(items: TableOfContents) {
+  const [activeId, setActiveId] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (items.length === 0) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            setActiveId(entry.target.id);
+            break;
+          }
+        }
+      },
+      { rootMargin: '-100px 0px -80% 0px' }
+    );
+
+    for (const item of items) {
+      const id = item.url.slice(1); // Remove # prefix
+      const element = document.getElementById(id);
+      if (element) observer.observe(element);
+    }
+
+    return () => observer.disconnect();
+  }, [items]);
+
+  return items.find((item) => item.url === `#${activeId}`) ?? items[0];
+}
+
+export function TOCCollapsed({ items }: TOCProps) {
+  const [open, setOpen] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const activeItem = useActiveItem(items);
+
+  useEffect(() => {
+    if (open) {
+      const handleClickOutside = (e: MouseEvent) => {
+        if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+          setOpen(false);
+        }
+      };
+      document.addEventListener('click', handleClickOutside);
+      return () => document.removeEventListener('click', handleClickOutside);
+    }
+  }, [open]);
+
+  if (items.length === 0) {
+    return null;
+  }
+
+  return (
+    <div ref={containerRef} className="xl:hidden sticky top-14 lg:top-24 z-10 -mx-6 lg:mx-0 w-[calc(100%+48px)]">
+      <button
+        onClick={() => setOpen(!open)}
+        className="w-full h-10 flex items-center text-sm bg-background border-b px-4"
+      >
+        <AlignJustifyIcon className="size-4 shrink-0 mr-2" />
+        <span className="truncate font-medium flex-1 text-left">{activeItem?.title ?? 'On this page'}</span>
+        <ChevronDownIcon
+          className={cn('size-4 shrink-0 ml-2 transition-transform duration-200', {
+            'rotate-180': open,
+          })}
+        />
+      </button>
+      <div
+        className={cn(
+          'absolute left-0 right-0 bg-background border-b shadow-lg transition-all duration-200 origin-top',
+          open ? 'scale-y-100 opacity-100' : 'scale-y-0 opacity-0 pointer-events-none'
+        )}
+      >
+        <AnchorProvider toc={items} single>
+          <ScrollProvider containerRef={containerRef}>
+            <nav className="py-3 px-6">
+              <div className="flex flex-col gap-1 text-sm">
+                {items.map((item) => (
+                  <TOCItem
+                    key={item.url}
+                    href={item.url}
+                    onClick={() => setOpen(false)}
+                    className="py-1.5 text-muted-foreground transition-colors hover:text-foreground data-[active=true]:font-medium data-[active=true]:text-primary"
+                    style={{
+                      paddingLeft: item.depth === 3 ? '1rem' : undefined,
+                    }}
+                  >
+                    {item.title}
+                  </TOCItem>
+                ))}
+              </div>
+            </nav>
+          </ScrollProvider>
+        </AnchorProvider>
+      </div>
+    </div>
+  );
+}

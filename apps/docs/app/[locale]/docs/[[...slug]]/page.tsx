@@ -14,6 +14,7 @@ import { docs } from 'content/docs';
 import { CodeBlock } from '@/components/code-block';
 import { routing } from '@/i18n/routing';
 import { TOCSidebar } from '@/components/docs/toc-sidebar';
+import { TOCCollapsed } from '@/components/docs/toc-collapsed';
 import type { TableOfContents } from '@/lib/toc';
 import { cn } from '@/lib/utils';
 import { Card } from '@/components/docs/prelude/card';
@@ -83,53 +84,56 @@ export default async function DocsPage({
     : { prev: null, next: null };
 
   return (
-    <div
-      className={cn(
-        'flex flex-1 gap-12 justify-center py-10 lg:pl-6 max-w-3xl mx-auto',
-        { 'xl:pl-18 max-w-6xl': toc.length !== 0 },
-      )}
-    >
-      <div className="grow">
-        <header className="space-y-2">
-          {section && (
-            <p className="text-sm font-semibold text-primary">{section}</p>
-          )}
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-200">
-            {frontmatter.title}
-          </h1>
-          <p className="mt-2 text-lg max-w-none prose dark:prose-invert">
-            {frontmatter.description}
-          </p>
-        </header>
+    <div className="flex-1">
+      <TOCCollapsed items={toc} />
+      <div
+        className={cn(
+          'flex gap-12 justify-center py-10 lg:pl-6 max-w-3xl mx-auto',
+          { 'xl:pl-18 max-w-6xl': toc.length !== 0 },
+        )}
+      >
+        <div className="grow">
+          <header className="space-y-2">
+            {section && (
+              <p className="text-sm font-semibold text-primary">{section}</p>
+            )}
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-200">
+              {frontmatter.title}
+            </h1>
+            <p className="mt-2 text-lg max-w-none prose dark:prose-invert">
+              {frontmatter.description}
+            </p>
+          </header>
 
-        <article className="mt-8 prose dark:prose-invert max-w-none">
-          <MDX
-            components={{
-              pre: CodeBlock,
-              Card,
-              img: (props) => (
-                <Image
-                  {...props}
-                  alt={props.alt}
-                  sizes={'(max-width: 768px) 100vw, 768px'}
-                  className={'rounded-lg'}
-                />
-              ),
-              a: (props) => (
-                <a
-                  {...props}
-                  className={
-                    'underline decoration-primary decoration-1 underline-offset-4 hover:decoration-2 transition-all'
-                  }
-                />
-              ),
-            }}
-          />
-        </article>
+          <article className="mt-8 prose dark:prose-invert max-w-none">
+            <MDX
+              components={{
+                pre: CodeBlock,
+                Card,
+                img: (props) => (
+                  <Image
+                    {...props}
+                    alt={props.alt}
+                    sizes={'(max-width: 768px) 100vw, 768px'}
+                    className={'rounded-lg'}
+                  />
+                ),
+                a: (props) => (
+                  <a
+                    {...props}
+                    className={
+                      'underline decoration-primary decoration-1 underline-offset-4 hover:decoration-2 transition-all'
+                    }
+                  />
+                ),
+              }}
+            />
+          </article>
 
-        <PageNavigation prev={navigation.prev} next={navigation.next} />
+          <PageNavigation prev={navigation.prev} next={navigation.next} />
+        </div>
+        <TOCSidebar items={toc} />
       </div>
-      <TOCSidebar items={toc} />
     </div>
   );
 }
