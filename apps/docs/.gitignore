@@ -53,3 +53,4 @@ next-env.d.ts
 docs.config.tsx
 docs.*.config.tsx
 /content
+/public
