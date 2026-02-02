@@ -4,6 +4,7 @@ import { NavItem } from '@/components/docs/nav-item';
 import { ThemeSwitcher } from '@/components/theme-switcher';
 import { LanguageSelect } from '@/components/language-select';
 import { cn } from '@/lib/utils';
+import { SidebarSheet } from '@/components/docs/sidebar-sheet';
 
 const NavItems = ({
   config,
@@ -63,6 +64,7 @@ export function Header({ config }: { config: DocsConfig }) {
           <div className={'flex items-center space-x-2'}>
             <LanguageSelect />
             <ThemeSwitcher />
+            <SidebarSheet config={config} />
           </div>
         </div>
         <NavItems config={config} className={'hidden lg:flex'} />
