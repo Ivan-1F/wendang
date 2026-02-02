@@ -25,7 +25,7 @@ bun run build     # Next.js production build
 
 ### Monorepo Structure
 - `apps/docs/` - Main Next.js 16 documentation app
-- `packages/wendang/` - Shared utility package (Bun module)
+- `packages/wendang/` - Shared utility package (Bun module, see its own CLAUDE.md for Bun-specific guidance)
 
 ### Key Technologies
 - **Next.js 16** with App Router
@@ -42,15 +42,31 @@ bun run build     # Next.js production build
 
 The `lib/slug.ts` module handles path-to-slug conversion and page lookup.
 
-### Configuration Files
+### Key Configuration Files
 
-- `apps/docs/content.config.ts` - MDX processing, Shiki highlighting, remark/rehype plugins
+- `apps/docs/docs.config.tsx` - **Site configuration entry point**: defines title, navigation structure (groups/sections/pages), and icon loader. This re-exports from a product-specific config file
+- `apps/docs/content.config.ts` - MDX processing, Shiki highlighting, remark/rehype plugins. Content is sourced from `content/docs-1/`
+- `apps/docs/lib/schema.ts` - Zod schemas for DocsConfig validation
+- `apps/docs/lib/config.ts` - Runtime config resolution with i18n locale merging
 - `turbo.json` - Turborepo task pipelines
 - `biome.json` - Linter/formatter config (2-space indent, single quotes)
 
 ### DocsConfig Schema (`lib/schema.ts`)
 
 Navigation uses a hierarchical structure:
-- **Group**: Top-level nav items with optional dropdowns
-- **Section**: Sub-sections within groups
-- **Page**: Individual MDX pages (referenced by file path)
+- **Group**: Top-level nav items with `title`, `icon`, `link`, and optional `children`
+- **Section**: Sub-sections within groups, with `title`, `icon`, optional `base` path, and `children`
+- **Page**: Individual MDX pages (string path or section object)
+
+Example in `docs.config.tsx`:
+```tsx
+groups: [
+  {
+    title: 'Guides',
+    link: '/docs/guides',
+    children: [
+      { title: 'Getting Started', children: ['.', 'quick-start'] },  // '.' = index page
+    ],
+  },
+]
+```
