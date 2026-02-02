@@ -9,6 +9,28 @@ const nextConfig = {
         source: '/docs/:path*.mdx',
         destination: '/llms.mdx/docs/:path*',
       },
+      {
+        source: '/:locale/docs/:path*',
+        has: [
+          {
+            type: 'header',
+            key: 'accept',
+            value: '.*text/markdown.*',
+          },
+        ],
+        destination: '/llms.mdx/docs/:path*',
+      },
+      {
+        source: '/:locale/docs/:path*',
+        has: [
+          {
+            type: 'header',
+            key: 'user-agent',
+            value: '.*(claude|anthropic|openai|gpt|cursor|copilot).*',
+          },
+        ],
+        destination: '/llms.mdx/docs/:path*',
+      },
     ];
   },
 };
