@@ -17,16 +17,18 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { SiClaude, SiMarkdown } from '@icons-pack/react-simple-icons';
 import { OpenAiIcon } from '@/components/icons/openai';
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
+import { useParams } from 'next/navigation';
 
 export const AiActions = ({ markdown }: { markdown: string }) => {
+  const { slug = [] } = useParams<{ slug?: string[] }>();
   const [copied, setCopied] = useState(false);
 
-  const copy = useCallback(() => {
+  const copy = () => {
     setCopied(true);
     void navigator.clipboard.writeText(markdown);
     setTimeout(() => setCopied(false), 1000);
-  }, [markdown]);
+  };
 
   const actions = [
     {
@@ -41,18 +43,29 @@ export const AiActions = ({ markdown }: { markdown: string }) => {
       description: 'View this page as plain text',
       icon: <SiMarkdown />,
       external: true,
+      action: () => window.open(`/docs/${slug.join('/')}.mdx`, '_blank'),
     },
     {
       title: 'Open in ChatGPT',
       description: 'Ask questions about this page',
       icon: <OpenAiIcon />,
       external: true,
+      action: () =>
+        window.open(
+          `https://chatgpt.com/?q=${encodeURIComponent(markdown)}`,
+          '_blank',
+        ),
     },
     {
       title: 'Open in Claude',
       description: 'Ask questions about this page',
       icon: <SiClaude />,
       external: true,
+      action: () =>
+        window.open(
+          `https://claude.ai/new?q=${encodeURIComponent(markdown)}`,
+          '_blank',
+        ),
     },
   ];
 
