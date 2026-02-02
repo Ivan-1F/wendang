@@ -17,6 +17,7 @@ export const SidebarSheet = ({ config }: { config: DocsConfig }) => {
       <SidebarSheetTrigger />
       <SheetContent showCloseButton={false} side="left" className="px-6">
         <SheetHeader className={'px-0'}>
+          <div className={'mb-4 font-medium'}>{config.title}</div>
           <GroupSelect />
         </SheetHeader>
         <SidebarWrapper links={groups.map((group) => group.link)}>
