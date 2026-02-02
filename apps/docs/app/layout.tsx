@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Geist, Geist_Mono, Inter } from 'next/font/google';
 import './globals.css';
 import { ThemeProvider } from '@/components/theme-provider';
+import { cn } from '@/lib/utils';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 
@@ -29,7 +30,13 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${inter.variable} scroll-pt-28`}
+      className={cn(
+        inter.variable,
+        // ~lg: header without tabs (14) + TOCCollapsed (10) + padding (4)
+        // lg~xl: header (14) + nav links (10) + TOCCollapsed (10) + padding (4)
+        // xl~: header (14) + nav links (10)  + padding (4)
+        'scroll-pt-28 lg:scroll-pt-38 xl:scroll-pt-28',
+      )}
     >
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
