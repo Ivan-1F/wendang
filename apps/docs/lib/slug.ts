@@ -1,6 +1,10 @@
+import { readFile } from 'node:fs/promises';
+import path from 'node:path';
 import { docs } from 'content/docs';
 import type { Page, Group } from '@/lib/schema';
 import { config } from '@/lib/config';
+
+const CONTENT_DIR = path.join(process.cwd(), 'content/docs');
 
 export interface FlatPage {
   href: string;
@@ -51,6 +55,20 @@ export async function getPage(slug: string[], locale?: string) {
   }
 
   return getPageBySlug([i18n.defaultLocale, ...slug]);
+}
+
+export async function getMarkdown(slug: string[]): Promise<string | null> {
+  const page = getPageBySlug(slug);
+  if (!page) {
+    return null;
+  }
+
+  try {
+    const filePath = path.join(CONTENT_DIR, page.path);
+    return await readFile(filePath, 'utf-8');
+  } catch {
+    return null;
+  }
 }
 
 /**
