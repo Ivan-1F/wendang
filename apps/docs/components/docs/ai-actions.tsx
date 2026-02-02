@@ -3,7 +3,7 @@
 import { ButtonGroup } from '@/components/ui/button-group';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { ChevronDownIcon, CopyIcon } from 'lucide-react';
+import { CheckIcon, ChevronDownIcon, CopyIcon } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,36 +12,55 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { SiClaude, SiMarkdown } from '@icons-pack/react-simple-icons';
 import { OpenAiIcon } from '@/components/icons/openai';
+import { useCallback, useState } from 'react';
 
-const actions = [
-  {
-    title: 'Copy page',
-    description: 'Copy page as Markdown for LLMs',
-    icon: <CopyIcon />,
-  },
-  {
-    title: 'View as Markdown',
-    description: 'View this page as plain text',
-    icon: <SiMarkdown />,
-  },
-  {
-    title: 'Open in ChatGPT',
-    description: 'Ask questions about this page',
-    icon: <OpenAiIcon />,
-  },
-  {
-    title: 'Open in Claude',
-    description: 'Ask questions about this page',
-    icon: <SiClaude />,
-  },
-];
+export const AiActions = ({ markdown }: { markdown: string }) => {
+  const [copied, setCopied] = useState(false);
 
-export const AiActions = () => {
+  const copy = useCallback(() => {
+    setCopied(true);
+    void navigator.clipboard.writeText(markdown);
+    setTimeout(() => setCopied(false), 1000);
+  }, [markdown]);
+
+  const actions = [
+    {
+      title: 'Copy page',
+      description: 'Copy page as Markdown for LLMs',
+      icon: <CopyIcon />,
+      action: copy,
+    },
+    {
+      title: 'View as Markdown',
+      description: 'View this page as plain text',
+      icon: <SiMarkdown />,
+    },
+    {
+      title: 'Open in ChatGPT',
+      description: 'Ask questions about this page',
+      icon: <OpenAiIcon />,
+    },
+    {
+      title: 'Open in Claude',
+      description: 'Ask questions about this page',
+      icon: <SiClaude />,
+    },
+  ];
+
   return (
     <ButtonGroup>
-      <Button variant={'outline'} size={'sm'}>
-        <CopyIcon className={'mr-1'} />
-        Copy Markdown
+      <Button variant={'outline'} size={'sm'} onClick={copy}>
+        {copied ? (
+          <>
+            <CheckIcon className={'mr-1'} />
+            Copied
+          </>
+        ) : (
+          <>
+            <CopyIcon className={'mr-1'} />
+            Copy Markdown
+          </>
+        )}
       </Button>
       <DropdownMenu>
         <DropdownMenuTrigger
@@ -57,7 +76,7 @@ export const AiActions = () => {
         />
         <DropdownMenuContent className={'w-80'}>
           {actions.map((action, index) => (
-            <DropdownMenuItem key={index}>
+            <DropdownMenuItem key={index} onClick={() => action.action?.()}>
               <div className={'border p-1.5 rounded-md text-muted-foreground'}>
                 {action.icon}
               </div>

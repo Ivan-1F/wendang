@@ -7,6 +7,7 @@ import {
   matchSection,
   getPageNavigation,
   pathToSlug,
+  getMarkdown,
 } from '@/lib/slug';
 import { PageNavigation } from '@/components/docs/page-navigation';
 import { config } from '@/lib/config';
@@ -61,6 +62,8 @@ export default async function DocsPage({
     notFound();
   }
 
+  const rawMarkdown = await getMarkdown(page);
+
   const {
     default: MDX,
     frontmatter,
@@ -102,7 +105,7 @@ export default async function DocsPage({
               <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-200">
                 {frontmatter.title}
               </h1>
-              <AiActions />
+              <AiActions markdown={rawMarkdown || ''} />
             </div>
             <p className="mt-2 text-lg max-w-none prose dark:prose-invert text-muted-foreground">
               {frontmatter.description}
