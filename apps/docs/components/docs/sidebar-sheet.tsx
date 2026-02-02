@@ -13,7 +13,7 @@ export const SidebarSheet = ({ config }: { config: DocsConfig }) => {
   const { groups } = config.navigation.group;
 
   return (
-    <Sheet>
+    <Sheet modal="trap-focus">
       <SidebarSheetTrigger />
       <SheetContent showCloseButton={false} side="left" className="px-6">
         <SheetHeader className={'px-0'}>
