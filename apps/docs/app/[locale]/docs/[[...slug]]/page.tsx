@@ -18,6 +18,7 @@ import { TOCCollapsed } from '@/components/docs/toc-collapsed';
 import type { TableOfContents } from '@/lib/toc';
 import { cn } from '@/lib/utils';
 import { Card } from '@/components/docs/prelude/card';
+import { AiActions } from '@/components/docs/ai-actions';
 
 export async function generateStaticParams() {
   const locales = routing().locales;
@@ -97,9 +98,12 @@ export default async function DocsPage({
             {section && (
               <p className="text-sm font-semibold text-primary">{section}</p>
             )}
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-200">
-              {frontmatter.title}
-            </h1>
+            <div className={'flex items-start justify-between'}>
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-200">
+                {frontmatter.title}
+              </h1>
+              <AiActions />
+            </div>
             <p className="mt-2 text-lg max-w-none prose dark:prose-invert text-muted-foreground">
               {frontmatter.description}
             </p>
