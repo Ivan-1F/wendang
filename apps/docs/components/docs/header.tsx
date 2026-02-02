@@ -61,7 +61,7 @@ export function Header({ config }: { config: DocsConfig }) {
           <div className={'flex items-center'}>
             <div className={'font-medium'}>{config.title}</div>
           </div>
-          <div className={'flex items-center space-x-2'}>
+          <div className={'flex items-center gap-2'}>
             <LanguageSelect />
             <ThemeSwitcher />
             <SidebarSheet config={config} />
