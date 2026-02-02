@@ -24,7 +24,7 @@ export function slugsEqual(a: string[], b: string[]): boolean {
   return a.length === b.length && a.every((v, i) => v === b[i]);
 }
 
-const getPageBySlug = (slug: string[]) => {
+export const getPageBySlug = (slug: string[]) => {
   const pages = docs.list();
 
   for (const page of pages) {
