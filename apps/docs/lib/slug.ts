@@ -57,12 +57,7 @@ export async function getPage(slug: string[], locale?: string) {
   return getPageBySlug([i18n.defaultLocale, ...slug]);
 }
 
-export async function getMarkdown(slug: string[]): Promise<string | null> {
-  const page = getPageBySlug(slug);
-  if (!page) {
-    return null;
-  }
-
+export async function getMarkdown(page: { path: string }): Promise<string | null> {
   try {
     const filePath = path.join(CONTENT_DIR, page.path);
     return await readFile(filePath, 'utf-8');

@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from 'next/server';
-import { getMarkdown } from '@/lib/slug';
+import { getMarkdown, getPageBySlug } from '@/lib/slug';
 
 export async function GET(
   _: NextRequest,
@@ -7,10 +7,16 @@ export async function GET(
 ) {
   const { slug = [] } = await params;
 
-  const content = await getMarkdown(slug);
+  const page = getPageBySlug(slug);
+
+  if (!page) {
+    return NextResponse.json({ error: 'Page not found' }, { status: 404 });
+  }
+
+  const content = await getMarkdown(page);
 
   if (!content) {
-    return NextResponse.json({ error: 'Page not found' }, { status: 404 });
+    return NextResponse.json({ error: 'Failed to read file' }, { status: 500 });
   }
 
   return new NextResponse(content, {
