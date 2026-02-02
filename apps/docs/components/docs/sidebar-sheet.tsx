@@ -3,6 +3,7 @@ import { Sheet, SheetContent, SheetHeader } from '@/components/ui/sheet';
 import { Sidebar } from '@/components/docs/sidebar';
 import { SidebarWrapper } from '@/components/docs/sidebar-wrapper';
 import { SidebarSheetTrigger } from '@/components/docs/sidebar-sheet-trigger';
+import { GroupSelect } from '@/components/group-select';
 
 export const SidebarSheet = ({ config }: { config: DocsConfig }) => {
   if (!('groups' in config.navigation.group)) {
@@ -15,7 +16,9 @@ export const SidebarSheet = ({ config }: { config: DocsConfig }) => {
     <Sheet>
       <SidebarSheetTrigger />
       <SheetContent showCloseButton={false} side="left" className="px-6">
-        <SheetHeader />
+        <SheetHeader className={'px-0'}>
+          <GroupSelect />
+        </SheetHeader>
         <SidebarWrapper links={groups.map((group) => group.link)}>
           {groups.map((group) => (
             <Sidebar
