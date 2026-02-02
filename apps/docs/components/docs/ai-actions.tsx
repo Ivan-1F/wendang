@@ -3,7 +3,12 @@
 import { ButtonGroup } from '@/components/ui/button-group';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { CheckIcon, ChevronDownIcon, CopyIcon } from 'lucide-react';
+import {
+  ArrowUpRightIcon,
+  CheckIcon,
+  ChevronDownIcon,
+  CopyIcon,
+} from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -28,22 +33,26 @@ export const AiActions = ({ markdown }: { markdown: string }) => {
       title: 'Copy page',
       description: 'Copy page as Markdown for LLMs',
       icon: <CopyIcon />,
+      external: false,
       action: copy,
     },
     {
       title: 'View as Markdown',
       description: 'View this page as plain text',
       icon: <SiMarkdown />,
+      external: true,
     },
     {
       title: 'Open in ChatGPT',
       description: 'Ask questions about this page',
       icon: <OpenAiIcon />,
+      external: true,
     },
     {
       title: 'Open in Claude',
       description: 'Ask questions about this page',
       icon: <SiClaude />,
+      external: true,
     },
   ];
 
@@ -86,6 +95,9 @@ export const AiActions = ({ markdown }: { markdown: string }) => {
                   {action.description}
                 </div>
               </div>
+              {action.external && (
+                <ArrowUpRightIcon className={'ml-auto text-muted-foreground'} />
+              )}
             </DropdownMenuItem>
           ))}
         </DropdownMenuContent>
