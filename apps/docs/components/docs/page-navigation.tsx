@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { getPage, type FlatPage } from '@/lib/slug';
-import { getLocale } from 'next-intl/server';
+import { getLocale, getTranslations } from 'next-intl/server';
 import { cn } from '@/lib/utils';
 
 interface PageNavigationProps {
@@ -19,6 +19,8 @@ async function NavButton({
   const pageData = await getPage(page.slug, await getLocale());
   const title = pageData?.compiled.frontmatter.title ?? page.slug.join('/');
 
+  const t = await getTranslations('page_navigation');
+
   return (
     <Link
       href={page.href}
@@ -29,12 +31,10 @@ async function NavButton({
     >
       <span className="text-xs text-muted-foreground flex items-center gap-1">
         {direction === 'prev' && <ChevronLeft className="w-3 h-3" />}
-        {direction === 'prev' ? 'Previous' : 'Next'}
+        {direction === 'prev' ? t('previous') : t('next')}
         {direction === 'next' && <ChevronRight className="w-3 h-3" />}
       </span>
-      <span className="text-sm font-medium">
-        {title}
-      </span>
+      <span className="text-sm font-medium">{title}</span>
     </Link>
   );
 }
