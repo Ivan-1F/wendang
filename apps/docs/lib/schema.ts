@@ -62,6 +62,7 @@ const translationsSchema = z.object({
   page_actions: z
     .object({
       copy_markdown: z.string().default('Copy Markdown'),
+      copied: z.string().default('Copied'),
       copy_page: z
         .object({
           title: z.string().default('Copy page'),

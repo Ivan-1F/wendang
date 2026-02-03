@@ -25,6 +25,7 @@ import { OpenAiIcon } from '@/components/icons/openai';
 import { useState, useMemo, useCallback, type ReactNode } from 'react';
 import { useParams } from 'next/navigation';
 import { useDocsConfig } from '@/components/docs/config-context';
+import { useTranslations } from 'next-intl';
 
 type ActionType =
   | 'copy'
@@ -44,6 +45,8 @@ interface ActionItem {
 }
 
 export const AiActions = ({ markdown }: { markdown: string }) => {
+  const t = useTranslations('page_actions');
+
   const { slug = [] } = useParams<{ slug?: string[] }>();
   const [copied, setCopied] = useState(false);
   const config = useDocsConfig();
@@ -60,24 +63,24 @@ export const AiActions = ({ markdown }: { markdown: string }) => {
     () => [
       {
         key: 'copy',
-        title: 'Copy page',
-        description: 'Copy page as Markdown for LLMs',
+        title: t('copy_page.title'),
+        description: t('copy_page.description'),
         icon: <CopyIcon />,
         external: false,
         action: copy,
       },
       {
         key: 'view',
-        title: 'View as Markdown',
-        description: 'View this page as plain text',
+        title: t('view_as_markdown.title'),
+        description: t('view_as_markdown.description'),
         icon: <SiMarkdown />,
         external: true,
         action: () => window.open(`/docs/${slug.join('/')}.mdx`, '_blank'),
       },
       {
         key: 'chatgpt',
-        title: 'Open in ChatGPT',
-        description: 'Ask questions about this page',
+        title: t('open_in_chatgpt.title'),
+        description: t('open_in_chatgpt.description'),
         icon: <OpenAiIcon />,
         external: true,
         action: () =>
@@ -88,8 +91,8 @@ export const AiActions = ({ markdown }: { markdown: string }) => {
       },
       {
         key: 'claude',
-        title: 'Open in Claude',
-        description: 'Ask questions about this page',
+        title: t('open_in_claude.title'),
+        description: t('open_in_claude.description'),
         icon: <SiClaude />,
         external: true,
         action: () =>
@@ -100,8 +103,8 @@ export const AiActions = ({ markdown }: { markdown: string }) => {
       },
       {
         key: 'perplexity',
-        title: 'Open in Perplexity',
-        description: 'Research this page with AI',
+        title: t('open_in_perplexity.title'),
+        description: t('open_in_perplexity.description'),
         icon: <SiPerplexity />,
         external: true,
         action: () =>
@@ -112,8 +115,8 @@ export const AiActions = ({ markdown }: { markdown: string }) => {
       },
       {
         key: 'grok',
-        title: 'Open in Grok',
-        description: 'Ask questions about this page',
+        title: t('open_in_grok.title'),
+        description: t('open_in_grok.description'),
         icon: <SiX />,
         external: true,
         action: () =>
@@ -123,7 +126,7 @@ export const AiActions = ({ markdown }: { markdown: string }) => {
           ),
       },
     ],
-    [copy, markdown, slug],
+    [copy, markdown, slug, t],
   );
 
   // Filter and sort actions based on config order
@@ -146,12 +149,12 @@ export const AiActions = ({ markdown }: { markdown: string }) => {
           {copied ? (
             <>
               <CheckIcon className={'mr-1'} />
-              Copied
+              {t('copied')}
             </>
           ) : (
             <>
               <CopyIcon className={'mr-1'} />
-              Copy Markdown
+              {t('copy_markdown')}
             </>
           )}
         </Button>
