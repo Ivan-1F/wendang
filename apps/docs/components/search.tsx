@@ -25,6 +25,15 @@ interface SearchResult {
   locale: string;
 }
 
+const searchSchema = {
+  id: 'string',
+  title: 'string',
+  pageTitle: 'string',
+  content: 'string',
+  path: 'string',
+  locale: 'string',
+} as const;
+
 // Keyboard shortcut hook
 function useKeyboardShortcut(key: string, callback: () => void) {
   React.useEffect(() => {
@@ -107,7 +116,7 @@ export function Search() {
   const [query, setQuery] = React.useState('');
   const [results, setResults] = React.useState<SearchResult[]>([]);
   const [loading, setLoading] = React.useState(false);
-  const [db, setDb] = React.useState<Orama<any> | null>(null);
+  const [db, setDb] = React.useState<Orama<typeof searchSchema> | null>(null);
 
   // Load search index
   React.useEffect(() => {
@@ -118,16 +127,7 @@ export function Search() {
       try {
         const response = await fetch('/search-index.json');
         const data = await response.json();
-        const database = create({
-          schema: {
-            id: 'string',
-            title: 'string',
-            pageTitle: 'string',
-            content: 'string',
-            path: 'string',
-            locale: 'string',
-          },
-        });
+        const database = create({ schema: searchSchema });
         await load(database, data);
         setDb(database);
       } catch (error) {
@@ -148,7 +148,9 @@ export function Search() {
     }
 
     async function performSearch() {
-      const searchResults = await search(db!, {
+      if (!db) return;
+
+      const searchResults = await search(db, {
         term: query,
         properties: ['title', 'pageTitle', 'content'],
         limit: 10,
@@ -159,7 +161,7 @@ export function Search() {
 
       // If no results for current locale, search all locales
       if (searchResults.hits.length === 0) {
-        const allResults = await search(db!, {
+        const allResults = await search(db, {
           term: query,
           properties: ['title', 'pageTitle', 'content'],
           limit: 10,
@@ -229,7 +231,7 @@ export function Search() {
             )}
 
             {!loading && query && results.length === 0 && (
-              <CommandEmpty>No results found for "{query}"</CommandEmpty>
+              <CommandEmpty>No results found for &ldquo;{query}&rdquo;</CommandEmpty>
             )}
 
             {!loading && !query && (
