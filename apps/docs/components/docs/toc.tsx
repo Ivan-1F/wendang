@@ -1,14 +1,13 @@
 'use client';
 
 import { useRef } from 'react';
-import {
-  AnchorProvider,
-  ScrollProvider,
-  TOCItem,
-} from 'fumadocs-core/toc';
+import { AnchorProvider, ScrollProvider, TOCItem } from 'fumadocs-core/toc';
 import type { TOCProps } from '@/lib/toc';
+import { useTranslations } from 'next-intl';
 
 export function TOC({ items }: TOCProps) {
+  const t = useTranslations();
+
   const containerRef = useRef<HTMLDivElement>(null);
 
   if (items.length === 0) {
@@ -19,7 +18,7 @@ export function TOC({ items }: TOCProps) {
     <AnchorProvider toc={items} single>
       <ScrollProvider containerRef={containerRef}>
         <nav aria-label="Table of Contents">
-          <p className="mb-4 text-sm font-medium">On this page</p>
+          <p className="mb-4 text-sm font-medium">{t('on_this_page')}</p>
           <div ref={containerRef} className="flex flex-col gap-1 text-sm">
             {items.map((item) => (
               <TOCItem
