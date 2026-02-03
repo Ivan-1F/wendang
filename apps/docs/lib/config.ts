@@ -4,14 +4,14 @@ import { merge } from 'ts-deepmerge';
 import { type DocsConfig, docsConfigSchema } from '@/lib/schema';
 
 // server-side helper to get docs config
-export const config = async (): Promise<DocsConfig> => {
-  const locale = await getLocale();
+export const config = async (locale?: string): Promise<DocsConfig> => {
+  const finalLocale = locale ?? await getLocale();
 
   if (!docsConfig.i18n) {
     return docsConfig;
   }
 
-  const localeConfig = docsConfig.i18n.locales[locale];
+  const localeConfig = docsConfig.i18n.locales[finalLocale];
 
   if (!localeConfig) {
     return docsConfig;
