@@ -5,6 +5,7 @@ import { ThemeSwitcher } from '@/components/theme-switcher';
 import { LanguageSelect } from '@/components/language-select';
 import { cn } from '@/lib/utils';
 import { SidebarSheet } from '@/components/docs/sidebar-sheet';
+import { Search } from '@/components/search';
 
 const NavItems = ({
   config,
@@ -62,6 +63,7 @@ export function Header({ config }: { config: DocsConfig }) {
             <div className={'font-medium'}>{config.title}</div>
           </div>
           <div className={'flex items-center gap-2'}>
+            <Search />
             <LanguageSelect />
             <ThemeSwitcher />
             <SidebarSheet config={config} />

@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "bun run build:search && next build",
-    "build:search": "bun run scripts/generate-search-index.ts",
+    "build:search": "bun --preload ./scripts/preload.ts scripts/generate-search-index.ts",
     "start": "next start",
     "lint": "eslint"
   },
