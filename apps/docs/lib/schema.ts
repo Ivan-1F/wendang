@@ -66,9 +66,18 @@ const i18nConfigSchema = z.object({
   defaultLocale: z.string(),
 });
 
+const pageActionConfigSchema = z.object({
+  enabled: z.boolean().default(true),
+  actions: z
+    .enum(['copy', 'view', 'chatgpt', 'claude', 'perplexity', 'grok'])
+    .array()
+    .default(['copy', 'view', 'chatgpt', 'claude']),
+});
+
 export const docsConfigSchema = z.object({
   title: stringOrElementSchema.default('My App'),
   navigation: navigationConfigSchema,
+  pageAction: pageActionConfigSchema.prefault({}),
   iconLoader: iconLoaderSchema.optional(),
 
   i18n: i18nConfigSchema.optional(),
