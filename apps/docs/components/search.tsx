@@ -4,7 +4,7 @@ import * as React from 'react';
 import { useRouter } from 'next/navigation';
 import { useLocale } from 'next-intl';
 import { create, load, search, type Orama } from '@orama/orama';
-import { FileTextIcon, HashIcon, Loader2Icon, SearchIcon } from 'lucide-react';
+import { FileTextIcon, HashIcon, Loader2Icon } from 'lucide-react';
 import {
   CommandDialog,
   Command,
@@ -37,6 +37,67 @@ function useKeyboardShortcut(key: string, callback: () => void) {
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [key, callback]);
+}
+
+// Highlight matching text
+function highlightText(text: string, query: string): React.ReactNode {
+  if (!query.trim() || !text) return text;
+
+  // Split query into words for matching
+  const words = query.toLowerCase().split(/\s+/).filter(Boolean);
+  if (words.length === 0) return text;
+
+  // Create regex pattern for all words
+  const pattern = new RegExp(`(${words.map(w => w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})`, 'gi');
+
+  const parts = text.split(pattern);
+
+  return parts.map((part, i) => {
+    const isMatch = words.some(w => part.toLowerCase() === w.toLowerCase());
+    if (isMatch) {
+      return (
+        <mark key={i} className="bg-yellow-200 dark:bg-yellow-800 text-inherit rounded-sm px-0.5">
+          {part}
+        </mark>
+      );
+    }
+    return part;
+  });
+}
+
+// Get content snippet around the matched term
+function getContentSnippet(content: string, query: string, maxLength: number = 120): string {
+  if (!content) return '';
+
+  const words = query.toLowerCase().split(/\s+/).filter(Boolean);
+  if (words.length === 0) return content.slice(0, maxLength);
+
+  // Find the first match position
+  const lowerContent = content.toLowerCase();
+  let matchIndex = -1;
+
+  for (const word of words) {
+    const idx = lowerContent.indexOf(word);
+    if (idx !== -1 && (matchIndex === -1 || idx < matchIndex)) {
+      matchIndex = idx;
+    }
+  }
+
+  if (matchIndex === -1) {
+    // No match found in content, return start
+    return content.slice(0, maxLength) + (content.length > maxLength ? '...' : '');
+  }
+
+  // Calculate snippet boundaries
+  const start = Math.max(0, matchIndex - 30);
+  const end = Math.min(content.length, matchIndex + maxLength - 30);
+
+  let snippet = content.slice(start, end);
+
+  if (start > 0) snippet = '...' + snippet;
+  if (end < content.length) snippet = snippet + '...';
+
+  return snippet;
 }
 
 export function Search() {
@@ -181,6 +242,8 @@ export function Search() {
               <CommandGroup heading="Results">
                 {results.map((result) => {
                   const section = isSection(result);
+                  const snippet = getContentSnippet(result.content, query);
+
                   return (
                     <CommandItem
                       key={result.id}
@@ -188,14 +251,14 @@ export function Search() {
                       onSelect={() => navigateToResult(result)}
                     >
                       {section ? (
-                        <HashIcon className="mt-0.5 size-4 shrink-0 text-muted-foreground" />
+                        <HashIcon className="mt-1 size-4 shrink-0 text-muted-foreground" />
                       ) : (
-                        <FileTextIcon className="mt-0.5 size-4 shrink-0 text-muted-foreground" />
+                        <FileTextIcon className="mt-1 size-4 shrink-0 text-muted-foreground" />
                       )}
-                      <div className="min-w-0 flex-1">
+                      <div className="min-w-0 flex-1 space-y-1">
                         <div className="flex items-center gap-2">
-                          <span className="truncate font-medium">
-                            {result.title}
+                          <span className="font-medium">
+                            {highlightText(result.title, query)}
                           </span>
                           {result.locale !== locale && (
                             <span className="rounded bg-muted px-1.5 py-0.5 text-xs uppercase">
@@ -204,8 +267,13 @@ export function Search() {
                           )}
                         </div>
                         {section && result.pageTitle !== result.title && (
-                          <div className="truncate text-sm text-muted-foreground">
+                          <div className="text-xs text-muted-foreground">
                             {result.pageTitle}
+                          </div>
+                        )}
+                        {snippet && (
+                          <div className="text-sm text-muted-foreground line-clamp-2">
+                            {highlightText(snippet, query)}
                           </div>
                         )}
                       </div>
