@@ -42,7 +42,7 @@ export const getPageBySlug = (slug: string[]) => {
 };
 
 export async function getPage(slug: string[], locale?: string) {
-  const i18n = await config().then((config) => config.i18n);
+  const i18n = await config(locale).then((config) => config.i18n);
 
   if (!i18n || !locale) {
     return getPageBySlug(slug);

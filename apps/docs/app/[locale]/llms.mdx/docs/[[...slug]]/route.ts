@@ -1,8 +1,24 @@
-import { type NextRequest, NextResponse } from 'next/server';
-import { getMarkdown, getPage } from '@/lib/slug';
+import { NextResponse } from 'next/server';
+import { getMarkdown, getPage, pathToSlug } from '@/lib/slug';
+import { docs } from 'content/docs';
+import { routing } from '@/i18n/routing';
+
+export const dynamic = 'force-static';
+
+export async function generateStaticParams() {
+  const locales = routing().locales;
+  const pages = docs.list();
+
+  return locales.flatMap((locale) =>
+    pages.map((page) => ({
+      locale,
+      slug: pathToSlug(page.path),
+    })),
+  );
+}
 
 export async function GET(
-  _: NextRequest,
+  _: Request,
   { params }: { params: Promise<{ locale: string; slug?: string[] }> },
 ) {
   const { locale, slug = [] } = await params;
