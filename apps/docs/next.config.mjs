@@ -10,6 +10,10 @@ const nextConfig = {
         destination: '/llms.mdx/docs/:path*',
       },
       {
+        source: '/:locale/docs/:path*.mdx',
+        destination: '/:locale/llms.mdx/docs/:path*',
+      },
+      {
         source: '/:locale/docs/:path*',
         has: [
           {
@@ -18,7 +22,7 @@ const nextConfig = {
             value: '.*text/markdown.*',
           },
         ],
-        destination: '/llms.mdx/docs/:path*',
+        destination: '/:locale/llms.mdx/docs/:path*',
       },
       {
         source: '/:locale/docs/:path*',
@@ -29,7 +33,7 @@ const nextConfig = {
             value: '.*(claude|anthropic|openai|gpt|cursor|copilot).*',
           },
         ],
-        destination: '/llms.mdx/docs/:path*',
+        destination: '/:locale/llms.mdx/docs/:path*',
       },
     ];
   },
