@@ -10,14 +10,14 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { useRouter, usePathname } from '@/i18n/navigation';
-import { useConfig } from '@/lib/use-config';
+import { useDocsConfig } from '@/components/docs/config-context';
 
 export const LanguageSelect = () => {
   const locale = useLocale();
   const pathname = usePathname();
   const router = useRouter();
 
-  const config = useConfig();
+  const config = useDocsConfig();
 
   if (!config.i18n) {
     return null;

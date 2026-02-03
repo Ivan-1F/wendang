@@ -24,7 +24,7 @@ import {
 import { OpenAiIcon } from '@/components/icons/openai';
 import { useState, useMemo, useCallback, type ReactNode } from 'react';
 import { useParams } from 'next/navigation';
-import { useConfig } from '@/lib/use-config';
+import { useDocsConfig } from '@/components/docs/config-context';
 
 type ActionType =
   | 'copy'
@@ -46,7 +46,7 @@ interface ActionItem {
 export const AiActions = ({ markdown }: { markdown: string }) => {
   const { slug = [] } = useParams<{ slug?: string[] }>();
   const [copied, setCopied] = useState(false);
-  const config = useConfig();
+  const config = useDocsConfig();
 
   const { enabled, actions: enabledActions } = config.pageAction;
 
