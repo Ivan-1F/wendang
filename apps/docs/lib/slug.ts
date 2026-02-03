@@ -54,7 +54,13 @@ export async function getPage(slug: string[], locale?: string) {
     return localePage;
   }
 
-  return getPageBySlug([i18n.defaultLocale, ...slug]);
+  const defaultLocalePage = getPageBySlug([i18n.defaultLocale, ...slug]);
+
+  if (defaultLocalePage) {
+    return defaultLocalePage;
+  }
+
+  return getPageBySlug(slug);
 }
 
 export async function getMarkdown(page: { path: string }): Promise<string | null> {
