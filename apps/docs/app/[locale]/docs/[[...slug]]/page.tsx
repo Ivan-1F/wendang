@@ -21,6 +21,17 @@ import { cn } from '@/lib/utils';
 import { Card } from '@/components/docs/prelude/card';
 import { AiActions } from '@/components/docs/ai-actions';
 
+const isExternalLink = (href?: string) => {
+  if (!href) return false;
+  if (href.startsWith('/') || href.startsWith('#') || href.startsWith('?')) {
+    return false;
+  }
+  if (href.startsWith('./') || href.startsWith('../')) {
+    return false;
+  }
+  return /^[a-z][a-z0-9+.-]*:/i.test(href) || href.startsWith('//');
+};
+
 export async function generateStaticParams() {
   const locales = routing().locales;
   const pages = docs.list();
@@ -125,14 +136,22 @@ export default async function DocsPage({
                     className={'rounded-lg'}
                   />
                 ),
-                a: (props) => (
-                  <a
-                    {...props}
-                    className={
-                      'underline decoration-primary decoration-1 underline-offset-4 hover:decoration-2 transition-all'
-                    }
-                  />
-                ),
+                a: ({ href, className, target, rel, ...rest }) => {
+                  const isExternal = isExternalLink(href);
+
+                  return (
+                    <a
+                      {...rest}
+                      href={href}
+                      target={isExternal ? target ?? '_blank' : target}
+                      rel={isExternal ? rel ?? 'noopener noreferrer' : rel}
+                      className={cn(
+                        'underline decoration-primary decoration-1 underline-offset-4 hover:decoration-2 transition-all',
+                        className,
+                      )}
+                    />
+                  );
+                },
               }}
             />
           </article>
