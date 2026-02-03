@@ -112,7 +112,7 @@ export default async function DocsPage({
             {section && (
               <p className="text-sm font-semibold text-primary">{section}</p>
             )}
-            <div className={'flex items-start justify-between'}>
+            <div className={'flex items-start justify-between gap-4'}>
               <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-200">
                 {frontmatter.title}
               </h1>
