@@ -7,7 +7,7 @@ const nextConfig = {
     return [
       {
         source: '/:locale/docs/:path*.mdx',
-        destination: '/:locale/llm/docs/:path*',
+        destination: '/:locale/llms.mdx/docs/:path*',
       },
       {
         source: '/:locale/docs/:path*',
@@ -18,7 +18,7 @@ const nextConfig = {
             value: '.*text/markdown.*',
           },
         ],
-        destination: '/:locale/llm/docs/:path*',
+        destination: '/:locale/llms.mdx/docs/:path*',
       },
       {
         source: '/:locale/docs/:path*',
@@ -29,7 +29,7 @@ const nextConfig = {
             value: '.*(claude|anthropic|openai|gpt|cursor|copilot).*',
           },
         ],
-        destination: '/:locale/llm/docs/:path*',
+        destination: '/:locale/llms.mdx/docs/:path*',
       },
     ];
   },
