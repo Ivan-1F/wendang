@@ -70,3 +70,31 @@ groups: [
   },
 ]
 ```
+
+## Routing / Rewrites / i18n Summary
+
+### Routes
+- Docs page route: `apps/docs/app/[locale]/docs/[[...slug]]/page.tsx`
+- LLM raw Markdown route: `apps/docs/app/[locale]/llms.mdx/docs/[[...slug]]/route.ts`
+  - Uses `getPage(slug, locale)` and `getMarkdown(page)` and returns `text/markdown`
+
+### Rewrites (Next.js)
+Config location: `apps/docs/next.config.mjs`
+
+- Rewrites `.mdx` direct hits or `Accept`/`User-Agent`-matched requests to the LLM route:
+  - `/:locale/docs/:path*.mdx` → `/:locale/llms.mdx/docs/:path*`
+  - `/:locale/docs/:path*` + `Accept: text/markdown` → `/:locale/llms.mdx/docs/:path*`
+  - `/:locale/docs/:path*` + AI-related UA → `/:locale/llms.mdx/docs/:path*`
+
+### i18n Middleware
+Config location: `apps/docs/proxy.ts`
+
+- Uses `next-intl` `createMiddleware` for locale detection
+- The default matcher excludes dotted paths (e.g. `favicon.ico`), so we **allow `.mdx`** here:
+  - `matcher: '/((?!api|trpc|_next|_vercel)(?!.*\\.(?!mdx(?:/|$))).*)'`
+  - This ensures `/docs/*.mdx` and `/[locale]/llms.mdx/...` go through middleware
+
+### Request Flow (Simplified)
+1. Request passes `proxy.ts` (`next-intl` middleware) for locale resolution
+2. `next.config.mjs` rewrites route qualifying docs requests to `llms.mdx`
+3. `llms.mdx` route returns raw Markdown (`text/markdown`)
