@@ -56,7 +56,7 @@ function highlightText(text: string, query: string): React.ReactNode {
     const isMatch = words.some(w => part.toLowerCase() === w.toLowerCase());
     if (isMatch) {
       return (
-        <mark key={i} className="bg-yellow-200 dark:bg-yellow-800 text-inherit rounded-sm px-0.5">
+        <mark key={i} className="bg-transparent text-primary">
           {part}
         </mark>
       );
