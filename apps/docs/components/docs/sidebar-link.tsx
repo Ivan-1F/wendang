@@ -20,7 +20,7 @@ export function SidebarLink({
       href={href}
       className={cn(
         'block py-1.5 px-3 rounded-xl',
-        { 'bg-primary/10 text-primary font-medium': pathname === href },
+        { 'bg-primary/10 text-primary font-semibold': pathname === href },
         { 'hover:bg-muted': pathname !== href },
         className,
       )}
