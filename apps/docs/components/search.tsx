@@ -4,7 +4,7 @@ import * as React from 'react';
 import { useRouter } from 'next/navigation';
 import { useLocale } from 'next-intl';
 import { create, load, search, type Orama } from '@orama/orama';
-import { FileTextIcon, HashIcon, Loader2Icon } from 'lucide-react';
+import { FileTextIcon, HashIcon, Loader2Icon, SearchIcon } from 'lucide-react';
 import {
   CommandDialog,
   Command,
@@ -15,6 +15,7 @@ import {
   CommandItem,
 } from '@/components/ui/command';
 import { Button } from '@/components/ui/button';
+import { KbdGroup, Kbd } from '@/components/ui/kbd';
 
 interface SearchResult {
   id: string;
@@ -234,8 +235,20 @@ export function Search() {
   return (
     <>
       {/* Search trigger button */}
-      <Button variant={'outline'} size={'sm'} onClick={() => setOpen(true)}>
-        Search documentation...
+      <Button
+        variant={'outline'}
+        size={'sm'}
+        className={'cursor-pointer font-normal text-muted-foreground w-80 justify-between hover:bg-muted/20'}
+        onClick={() => setOpen(true)}
+      >
+        <div className={'flex items-center'}>
+          <SearchIcon className={'mr-1'} />
+          Search documentation...
+        </div>
+        <KbdGroup>
+          <Kbd>⌘</Kbd>
+          <Kbd>K</Kbd>
+        </KbdGroup>
       </Button>
 
       {/* Search dialog */}
