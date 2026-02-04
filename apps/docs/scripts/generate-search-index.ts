@@ -9,6 +9,7 @@ import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import path from 'node:path';
 import { create, insertMultiple, save } from '@orama/orama';
 import { content } from './preload';
+import docsConfig from '@/docs.config';
 
 const CONTENT_DIR = path.join(process.cwd(), 'content/docs');
 const OUTPUT_FILE = path.join(process.cwd(), 'public/search-index.json');
@@ -17,6 +18,7 @@ interface SearchDocument {
   id: string;
   title: string;
   pageTitle: string;
+  groupTitle: string;
   content: string;
   path: string;
   locale: string;
@@ -32,6 +34,18 @@ interface Section {
   anchor: string;
   title: string;
   content: string;
+}
+
+interface ConfigSection {
+  title: string;
+  base?: string;
+  children: (string | ConfigSection)[];
+}
+
+interface ConfigGroup {
+  title: string;
+  link: string;
+  children: (string | ConfigSection)[];
 }
 
 // Extract locale from path (e.g., "cn/guides/index.mdx" -> "cn")
@@ -140,6 +154,27 @@ function parseSections(mdxContent: string): { intro: string; sections: Section[]
   };
 }
 
+// Get group title from config based on URL path
+function getGroupTitle(urlPath: string): string {
+  const groupConfig = docsConfig.navigation.group;
+  if (!('groups' in groupConfig)) {
+    return '';
+  }
+
+  // Find matching group by link prefix
+  const sortedGroups = [...groupConfig.groups].sort(
+    (a, b) => b.link.length - a.link.length
+  );
+
+  for (const group of sortedGroups) {
+    if (urlPath === group.link || urlPath.startsWith(`${group.link}/`)) {
+      return group.title;
+    }
+  }
+
+  return '';
+}
+
 async function main() {
   console.log('Generating search index...');
 
@@ -157,6 +192,7 @@ async function main() {
       id: 'string',
       title: 'string',
       pageTitle: 'string',
+      groupTitle: 'string',
       content: 'string',
       path: 'string',
       locale: 'string',
@@ -176,6 +212,7 @@ async function main() {
     const locale = extractLocale(page.path);
     const basePath = slug ? `/docs/${slug}` : '/docs';
     const pageTitle = frontmatter.title || slug.split('/').pop() || 'Untitled';
+    const groupTitle = getGroupTitle(basePath);
 
     // Read MDX source file to extract section content
     let intro = frontmatter.description || '';
@@ -204,6 +241,7 @@ async function main() {
       id: `${page.path}#intro`,
       title: pageTitle,
       pageTitle,
+      groupTitle,
       content: intro,
       path: basePath,
       locale,
@@ -219,6 +257,7 @@ async function main() {
         id: `${page.path}#${anchor}`,
         title: item.title,
         pageTitle,
+        groupTitle,
         content: sectionContent,
         path: `${basePath}#${anchor}`,
         locale,

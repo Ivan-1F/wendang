@@ -20,6 +20,7 @@ interface SearchResult {
   id: string;
   title: string;
   pageTitle: string;
+  groupTitle: string;
   content: string;
   path: string;
   locale: string;
@@ -29,6 +30,7 @@ const searchSchema = {
   id: 'string',
   title: 'string',
   pageTitle: 'string',
+  groupTitle: 'string',
   content: 'string',
   path: 'string',
   locale: 'string',
@@ -107,6 +109,23 @@ function getContentSnippet(content: string, query: string, maxLength: number = 1
   if (end < content.length) snippet = snippet + '...';
 
   return snippet;
+}
+
+// Build breadcrumb based on result type
+function getBreadcrumb(result: SearchResult, isSection: boolean): string {
+  const parts: string[] = [];
+
+  if (result.groupTitle) {
+    parts.push(result.groupTitle);
+  }
+
+  parts.push(result.pageTitle);
+
+  if (isSection && result.title !== result.pageTitle) {
+    parts.push(result.title);
+  }
+
+  return parts.join(' > ');
 }
 
 export function Search() {
@@ -216,7 +235,7 @@ export function Search() {
         onOpenChange={setOpen}
         title="Search Documentation"
         description="Search for pages and sections in the documentation"
-        className="top-[15%]"
+        className="top-[15%] sm:max-w-2xl!"
       >
         <Command shouldFilter={false} className="rounded-lg">
           <CommandInput
@@ -245,6 +264,7 @@ export function Search() {
               <CommandGroup heading="Results">
                 {results.map((result) => {
                   const section = isSection(result);
+                  const breadcrumb = getBreadcrumb(result, section);
                   const snippet = getContentSnippet(result.content, query);
 
                   return (
@@ -258,24 +278,23 @@ export function Search() {
                       ) : (
                         <FileTextIcon className="mt-1 size-4 shrink-0 text-muted-foreground" />
                       )}
-                      <div className="min-w-0 flex-1 space-y-1">
-                        <div className="flex items-center gap-2">
-                          <span className="font-medium">
-                            {highlightText(result.title, query)}
-                          </span>
+                      <div className="min-w-0 flex-1 space-y-0.5">
+                        {/* Line 1: Breadcrumb */}
+                        <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                          <span className="truncate">{breadcrumb}</span>
                           {result.locale !== locale && (
                             <span className="rounded bg-muted px-1.5 py-0.5 text-xs uppercase">
                               {result.locale}
                             </span>
                           )}
                         </div>
-                        {section && result.pageTitle !== result.title && (
-                          <div className="text-xs text-muted-foreground">
-                            {result.pageTitle}
-                          </div>
-                        )}
+                        {/* Line 2: Title */}
+                        <div className="font-medium">
+                          {highlightText(result.title, query)}
+                        </div>
+                        {/* Line 3: Content */}
                         {snippet && (
-                          <div className="text-sm text-muted-foreground line-clamp-2">
+                          <div className="text-sm text-muted-foreground line-clamp-1">
                             {highlightText(snippet, query)}
                           </div>
                         )}
