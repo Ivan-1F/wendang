@@ -59,12 +59,15 @@ function highlightText(text: string, query: string): React.ReactNode {
   if (words.length === 0) return text;
 
   // Create regex pattern for all words
-  const pattern = new RegExp(`(${words.map(w => w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})`, 'gi');
+  const pattern = new RegExp(
+    `(${words.map((w) => w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})`,
+    'gi',
+  );
 
   const parts = text.split(pattern);
 
   return parts.map((part, i) => {
-    const isMatch = words.some(w => part.toLowerCase() === w.toLowerCase());
+    const isMatch = words.some((w) => part.toLowerCase() === w.toLowerCase());
     if (isMatch) {
       return (
         <mark key={i} className="bg-transparent text-primary">
@@ -77,7 +80,11 @@ function highlightText(text: string, query: string): React.ReactNode {
 }
 
 // Get content snippet around the matched term
-function getContentSnippet(content: string, query: string, maxLength: number = 120): string {
+function getContentSnippet(
+  content: string,
+  query: string,
+  maxLength: number = 120,
+): string {
   if (!content) return '';
 
   const words = query.toLowerCase().split(/\s+/).filter(Boolean);
@@ -96,7 +103,9 @@ function getContentSnippet(content: string, query: string, maxLength: number = 1
 
   if (matchIndex === -1) {
     // No match found in content, return start
-    return content.slice(0, maxLength) + (content.length > maxLength ? '...' : '');
+    return (
+      content.slice(0, maxLength) + (content.length > maxLength ? '...' : '')
+    );
   }
 
   // Calculate snippet boundaries
@@ -251,7 +260,9 @@ export function Search() {
             )}
 
             {!loading && query && results.length === 0 && (
-              <CommandEmpty>No results found for &ldquo;{query}&rdquo;</CommandEmpty>
+              <CommandEmpty>
+                No results found for &ldquo;{query}&rdquo;
+              </CommandEmpty>
             )}
 
             {!loading && !query && (
