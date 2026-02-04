@@ -37,7 +37,7 @@ export const LanguageSelect = () => {
         }
       }}
     >
-      <SelectTrigger className={'w-38'}>
+      <SelectTrigger className={'w-38'} size={'sm'}>
         <SelectValue />
       </SelectTrigger>
       <SelectContent alignItemWithTrigger>
