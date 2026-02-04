@@ -216,6 +216,7 @@ export function Search() {
         onOpenChange={setOpen}
         title="Search Documentation"
         description="Search for pages and sections in the documentation"
+        className="top-[15%]"
       >
         <Command shouldFilter={false} className="rounded-lg">
           <CommandInput
