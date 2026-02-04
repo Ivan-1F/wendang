@@ -207,7 +207,7 @@ export function Search() {
     <>
       {/* Search trigger button */}
       <Button variant={'outline'} size={'sm'} onClick={() => setOpen(true)}>
-        Search Documentation
+        Search documentation...
       </Button>
 
       {/* Search dialog */}
