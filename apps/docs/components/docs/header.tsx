@@ -59,11 +59,11 @@ export function Header({ config }: { config: DocsConfig }) {
       {/* px-9 = px-6 (base) + px-3 (sidebar pl-3) */}
       <div className={'px-6 lg:px-9'}>
         <div className={'h-14 flex items-center justify-between'}>
-          <div className={'flex items-center'}>
+          <div className={'flex-1 flex items-center'}>
             <div className={'font-medium'}>{config.title}</div>
           </div>
-          <div className={'flex items-center gap-2'}>
-            <Search />
+          <Search />
+          <div className={'flex-1 flex items-center justify-end gap-2'}>
             <LanguageSelect />
             <ThemeSwitcher />
             <SidebarSheet config={config} />
