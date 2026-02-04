@@ -171,7 +171,7 @@ export const AiActions = ({ markdown }: { markdown: string }) => {
             </Button>
           }
         />
-        <DropdownMenuContent className={'w-80'}>
+        <DropdownMenuContent className={'w-80'} align={'end'}>
           {actions.map((action) => (
             <DropdownMenuItem
               key={action.key}
