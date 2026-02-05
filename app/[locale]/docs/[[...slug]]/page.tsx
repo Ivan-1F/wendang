@@ -56,8 +56,14 @@ export async function generateMetadata({
     notFound();
   }
 
+  const docsConfig = await config(locale);
+  const pageTitle = page.compiled.frontmatter.title;
+  const title = docsConfig.siteName
+    ? `${pageTitle} - ${docsConfig.siteName}`
+    : pageTitle;
+
   return {
-    title: page.compiled.frontmatter.title,
+    title,
   };
 }
 

@@ -137,6 +137,8 @@ const pageActionConfigSchema = z.object({
 
 export const docsConfigSchema = z.object({
   title: stringOrElementSchema.default('My App'),
+  /** Site name used for page title suffix, e.g. "Introduction - {siteName}" */
+  siteName: z.string().optional(),
   navigation: navigationConfigSchema,
   pageAction: pageActionConfigSchema.prefault({}),
   iconLoader: iconLoaderSchema.optional(),
