@@ -127,7 +127,7 @@ export default async function DocsPage({
             <p className="text-lg max-w-none prose dark:prose-invert text-muted-foreground">
               {frontmatter.description}
             </p>
-            <AiActions className={'mt-4 lg:hidden'} markdown={rawMarkdown || ''} />
+            <AiActions className={'mt-4 sm:hidden'} markdown={rawMarkdown || ''} />
           </header>
 
           <article className="mt-8 prose dark:prose-invert max-w-none">
