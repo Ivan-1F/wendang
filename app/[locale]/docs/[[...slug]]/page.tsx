@@ -122,11 +122,12 @@ export default async function DocsPage({
               <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-200">
                 {frontmatter.title}
               </h1>
-              <AiActions markdown={rawMarkdown || ''} />
+              <AiActions className={'hidden sm:block'} markdown={rawMarkdown || ''} />
             </div>
-            <p className="mt-2 text-lg max-w-none prose dark:prose-invert text-muted-foreground">
+            <p className="text-lg max-w-none prose dark:prose-invert text-muted-foreground">
               {frontmatter.description}
             </p>
+            <AiActions className={'mt-4 lg:hidden'} markdown={rawMarkdown || ''} />
           </header>
 
           <article className="mt-8 prose dark:prose-invert max-w-none">

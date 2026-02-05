@@ -44,7 +44,13 @@ interface ActionItem {
   action: () => void;
 }
 
-export const AiActions = ({ markdown }: { markdown: string }) => {
+export const AiActions = ({
+  markdown,
+  className,
+}: {
+  markdown: string;
+  className?: string;
+}) => {
   const t = useTranslations('page_actions');
 
   const { slug = [] } = useParams<{ slug?: string[] }>();
@@ -143,7 +149,7 @@ export const AiActions = ({ markdown }: { markdown: string }) => {
   }
 
   return (
-    <ButtonGroup>
+    <ButtonGroup className={className}>
       {showCopyButton && (
         <Button variant={'outline'} size={'sm'} onClick={copy}>
           {copied ? (
