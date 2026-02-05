@@ -18,7 +18,12 @@ bun run lint      # Run linter (Biome)
 
 # From apps/docs specifically
 bun run dev       # Next.js dev server
-bun run build     # Next.js production build
+bun run build     # Next.js production build (runs build:search first)
+bun run build:search  # Generate Orama search index to public/search-index.json
+
+# Testing (from apps/docs)
+bun test          # Run tests using Bun's built-in test runner
+bun test lib/slug.test.ts  # Run a single test file
 ```
 
 ## Architecture
@@ -31,6 +36,7 @@ bun run build     # Next.js production build
 - **Next.js 16** with App Router
 - **MDX** via `fuma-content` for content processing
 - **Shiki** for code syntax highlighting
+- **Orama** for client-side full-text search
 - **next-intl** for internationalization (cn/en/jp locales)
 - **Tailwind CSS** + **shadcn/ui** components
 - **Turborepo** for build orchestration
@@ -40,14 +46,18 @@ bun run build     # Next.js production build
 - `/[locale]/` - Homepage
 - `/[locale]/docs/[[...slug]]` - Documentation pages (catch-all route)
 
-The `lib/slug.ts` module handles path-to-slug conversion and page lookup.
+The `lib/slug.ts` module handles path-to-slug conversion and page lookup. Key behaviors:
+- **Route groups**: Parenthesized folders like `(core)` are stripped from slugs
+- **Index pages**: `index.mdx` maps to the parent directory slug
+- `matchSection()` recursively finds the deepest matching navigation section
+- `flattenPages()` converts hierarchical nav to a flat list for prev/next navigation
 
 ### Key Configuration Files
 
 - `apps/docs/docs.config.tsx` - **Site configuration entry point**: defines title, navigation structure (groups/sections/pages), and icon loader. This re-exports from a product-specific config file
 - `apps/docs/content.config.ts` - MDX processing, Shiki highlighting, remark/rehype plugins. Content is sourced from `content/docs-1/`
 - `apps/docs/lib/schema.ts` - Zod schemas for DocsConfig validation
-- `apps/docs/lib/config.ts` - Runtime config resolution with i18n locale merging
+- `apps/docs/lib/config.ts` - Runtime config resolution with i18n locale merging (uses `ts-deepmerge`)
 - `turbo.json` - Turborepo task pipelines
 - `biome.json` - Linter/formatter config (2-space indent, single quotes)
 
@@ -71,6 +81,35 @@ groups: [
 ]
 ```
 
+### Context Providers and State
+
+The app uses React Context for state management (no external state library):
+- `DocsConfigProvider` / `useDocsConfig()` - Global docs config access
+- `SearchModalProvider` / `useSearchModal()` - Search modal open/close state
+- `ThemeProvider` (next-themes) - Dark/light theme
+
+### Search System
+
+Uses **Orama** for client-side full-text search:
+- `scripts/generate-search-index.ts` builds the index at build time (`bun run build:search`)
+- Index is written to `public/search-index.json` with page titles, sections, content, and locale
+- Search is locale-aware: prioritizes current locale results, falls back to all
+- MDX content is cleaned (imports, code blocks, JSX removed) before indexing
+- Activated via `Cmd+K` keyboard shortcut
+
+### MDX Code Block Enhancements
+
+Code blocks support meta attributes parsed by `metaTransformer` in `content.config.ts`:
+- `title="filename.ts"` - Displays a title bar above the code block
+- `icon="react"` - Shows an icon next to the title
+- `lineNumbers` - Enables line numbers
+- Shiki transformers: `transformerNotationDiff` (diff highlighting), `transformerNotationHighlight` (line highlighting)
+
+### AI / LLM Integration
+
+- **AI Actions component** (`ai-actions.tsx`): Per-page dropdown offering "Open in ChatGPT/Claude/Perplexity/Grok", markdown view, and copy. Configured via `enabledActions` in docs config.
+- **LLM route** (`/[locale]/llms.mdx/docs/[[...slug]]`): Serves raw markdown for each doc page, force-statically generated for all locale/page combinations.
+
 ## Routing / Rewrites / i18n Summary
 
 ### Routes
@@ -93,6 +132,11 @@ Config location: `apps/docs/proxy.ts`
 - The default matcher excludes dotted paths (e.g. `favicon.ico`), so we **allow `.mdx`** here:
   - `matcher: '/((?!api|trpc|_next|_vercel)(?!.*\\.(?!mdx(?:/|$))).*)'`
   - This ensures `/docs/*.mdx` and `/[locale]/llms.mdx/...` go through middleware
+
+### i18n Config Resolution
+- `i18n/routing.ts` dynamically generates routing config from `docsConfig.i18n.locales`
+- `lib/config.ts` deep-merges locale-specific overrides onto the base config at runtime
+- Translation namespaces: `on_this_page`, `page_navigation`, `page_actions`
 
 ### Request Flow (Simplified)
 1. Request passes `proxy.ts` (`next-intl` middleware) for locale resolution
