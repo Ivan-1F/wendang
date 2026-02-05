@@ -5,7 +5,11 @@ import { ThemeSwitcher } from '@/components/theme-switcher';
 import { LanguageSelect } from '@/components/language-select';
 import { cn } from '@/lib/utils';
 import { SidebarSheet } from '@/components/docs/sidebar-sheet';
-import { Search } from '@/components/search';
+import {
+  SearchTrigger,
+  SearchTriggerIcon,
+  SearchModal,
+} from '@/components/search';
 
 const NavItems = ({
   config,
@@ -62,13 +66,15 @@ export function Header({ config }: { config: DocsConfig }) {
           <div className={'flex-1 flex items-center'}>
             <div className={'font-medium'}>{config.title}</div>
           </div>
-          <Search />
+          <SearchTrigger className="hidden lg:flex" />
           <div className={'flex-1 flex items-center justify-end gap-2'}>
+            <SearchTriggerIcon className="lg:hidden" />
             <LanguageSelect />
             <ThemeSwitcher />
             <SidebarSheet config={config} />
           </div>
         </div>
+        <SearchModal />
         <NavItems config={config} className={'hidden lg:flex'} />
       </div>
       <div className={'absolute z-0 bottom-0 bg-border w-full h-px'}></div>

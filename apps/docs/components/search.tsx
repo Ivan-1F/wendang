@@ -16,6 +16,8 @@ import {
 } from '@/components/ui/command';
 import { Button } from '@/components/ui/button';
 import { KbdGroup, Kbd } from '@/components/ui/kbd';
+import { useSearchModal } from '@/components/search-modal-provider';
+import { cn } from '@/lib/utils';
 
 interface SearchResult {
   id: string;
@@ -138,10 +140,53 @@ function getBreadcrumb(result: SearchResult, isSection: boolean): string {
   return parts.join(' > ');
 }
 
-export function Search() {
+// Search trigger button (full version with text)
+export function SearchTrigger({ className }: { className?: string }) {
+  const { setOpen } = useSearchModal();
+
+  return (
+    <Button
+      variant={'outline'}
+      size={'sm'}
+      className={cn(
+        'cursor-pointer font-normal text-muted-foreground w-80 justify-between hover:bg-muted/20',
+        className,
+      )}
+      onClick={() => setOpen(true)}
+    >
+      <div className={'flex items-center'}>
+        <SearchIcon className={'mr-1'} />
+        Search documentation...
+      </div>
+      <KbdGroup>
+        <Kbd>⌘</Kbd>
+        <Kbd>K</Kbd>
+      </KbdGroup>
+    </Button>
+  );
+}
+
+// Search trigger button (icon only version for mobile)
+export function SearchTriggerIcon({ className }: { className?: string }) {
+  const { setOpen } = useSearchModal();
+
+  return (
+    <Button
+      variant={'outline'}
+      size={'icon'}
+      className={cn('cursor-pointer', className)}
+      onClick={() => setOpen(true)}
+    >
+      <SearchIcon className="size-4" />
+    </Button>
+  );
+}
+
+// Search modal component
+export function SearchModal() {
   const router = useRouter();
   const locale = useLocale();
-  const [open, setOpen] = React.useState(false);
+  const { open, setOpen } = useSearchModal();
   const [query, setQuery] = React.useState('');
   const [results, setResults] = React.useState<SearchResult[]>([]);
   const [loading, setLoading] = React.useState(false);
@@ -233,104 +278,84 @@ export function Search() {
   }
 
   return (
-    <>
-      {/* Search trigger button */}
-      <Button
-        variant={'outline'}
-        size={'sm'}
-        className={'cursor-pointer font-normal text-muted-foreground w-80 justify-between hover:bg-muted/20'}
-        onClick={() => setOpen(true)}
-      >
-        <div className={'flex items-center'}>
-          <SearchIcon className={'mr-1'} />
-          Search documentation...
-        </div>
-        <KbdGroup>
-          <Kbd>⌘</Kbd>
-          <Kbd>K</Kbd>
-        </KbdGroup>
-      </Button>
+    <CommandDialog
+      open={open}
+      onOpenChange={setOpen}
+      title="Search Documentation"
+      description="Search for pages and sections in the documentation"
+      className="top-[15%] sm:max-w-2xl!"
+    >
+      <Command shouldFilter={false} className="rounded-lg">
+        <CommandInput
+          placeholder="Search documentation..."
+          value={query}
+          onValueChange={setQuery}
+        />
+        <CommandList className="max-h-80">
+          {loading && (
+            <div className="flex items-center justify-center py-6">
+              <Loader2Icon className="size-5 animate-spin text-muted-foreground" />
+            </div>
+          )}
 
-      {/* Search dialog */}
-      <CommandDialog
-        open={open}
-        onOpenChange={setOpen}
-        title="Search Documentation"
-        description="Search for pages and sections in the documentation"
-        className="top-[15%] sm:max-w-2xl!"
-      >
-        <Command shouldFilter={false} className="rounded-lg">
-          <CommandInput
-            placeholder="Search documentation..."
-            value={query}
-            onValueChange={setQuery}
-          />
-          <CommandList className="max-h-80">
-            {loading && (
-              <div className="flex items-center justify-center py-6">
-                <Loader2Icon className="size-5 animate-spin text-muted-foreground" />
-              </div>
-            )}
+          {!loading && query && results.length === 0 && (
+            <CommandEmpty>
+              No results found for &ldquo;{query}&rdquo;
+            </CommandEmpty>
+          )}
 
-            {!loading && query && results.length === 0 && (
-              <CommandEmpty>
-                No results found for &ldquo;{query}&rdquo;
-              </CommandEmpty>
-            )}
+          {!loading && !query && (
+            <div className="py-6 text-center text-sm text-muted-foreground">
+              Type to search...
+            </div>
+          )}
 
-            {!loading && !query && (
-              <div className="py-6 text-center text-sm text-muted-foreground">
-                Type to search...
-              </div>
-            )}
+          {results.length > 0 && (
+            <CommandGroup heading="Results">
+              {results.map((result) => {
+                const section = isSection(result);
+                const breadcrumb = getBreadcrumb(result, section);
+                const snippet = getContentSnippet(result.content, query);
 
-            {results.length > 0 && (
-              <CommandGroup heading="Results">
-                {results.map((result) => {
-                  const section = isSection(result);
-                  const breadcrumb = getBreadcrumb(result, section);
-                  const snippet = getContentSnippet(result.content, query);
-
-                  return (
-                    <CommandItem
-                      key={result.id}
-                      value={result.id}
-                      onSelect={() => navigateToResult(result)}
-                    >
-                      {section ? (
-                        <HashIcon className="mt-1 size-4 shrink-0 text-muted-foreground" />
-                      ) : (
-                        <FileTextIcon className="mt-1 size-4 shrink-0 text-muted-foreground" />
-                      )}
-                      <div className="min-w-0 flex-1 space-y-0.5">
-                        {/* Line 1: Breadcrumb */}
-                        <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                          <span className="truncate">{breadcrumb}</span>
-                          {result.locale !== locale && (
-                            <span className="rounded bg-muted px-1.5 py-0.5 text-xs uppercase">
-                              {result.locale}
-                            </span>
-                          )}
-                        </div>
-                        {/* Line 2: Title */}
-                        <div className="font-medium">
-                          {highlightText(result.title, query)}
-                        </div>
-                        {/* Line 3: Content */}
-                        {snippet && (
-                          <div className="text-sm text-muted-foreground line-clamp-1">
-                            {highlightText(snippet, query)}
-                          </div>
+                return (
+                  <CommandItem
+                    key={result.id}
+                    value={result.id}
+                    onSelect={() => navigateToResult(result)}
+                  >
+                    {section ? (
+                      <HashIcon className="mt-1 size-4 shrink-0 text-muted-foreground" />
+                    ) : (
+                      <FileTextIcon className="mt-1 size-4 shrink-0 text-muted-foreground" />
+                    )}
+                    <div className="min-w-0 flex-1 space-y-0.5">
+                      {/* Line 1: Breadcrumb */}
+                      <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                        <span className="truncate">{breadcrumb}</span>
+                        {result.locale !== locale && (
+                          <span className="rounded bg-muted px-1.5 py-0.5 text-xs uppercase">
+                            {result.locale}
+                          </span>
                         )}
                       </div>
-                    </CommandItem>
-                  );
-                })}
-              </CommandGroup>
-            )}
-          </CommandList>
-        </Command>
-      </CommandDialog>
-    </>
+                      {/* Line 2: Title */}
+                      <div className="font-medium">
+                        {highlightText(result.title, query)}
+                      </div>
+                      {/* Line 3: Content */}
+                      {snippet && (
+                        <div className="text-sm text-muted-foreground line-clamp-1">
+                          {highlightText(snippet, query)}
+                        </div>
+                      )}
+                    </div>
+                  </CommandItem>
+                );
+              })}
+            </CommandGroup>
+          )}
+        </CommandList>
+      </Command>
+    </CommandDialog>
   );
 }
