@@ -174,7 +174,7 @@ export function SearchTriggerIcon({ className }: { className?: string }) {
   return (
     <Button
       variant={'outline'}
-      size={'icon'}
+      size={'icon-sm'}
       className={cn('cursor-pointer', className)}
       onClick={() => setOpen(true)}
     >
