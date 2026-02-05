@@ -1,6 +1,6 @@
 'use client';
 
-import * as React from 'react';
+import { useState, useEffect, type ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
 import { useLocale } from 'next-intl';
 import { create, load, search, type Orama } from '@orama/orama';
@@ -41,7 +41,7 @@ const searchSchema = {
 
 // Keyboard shortcut hook
 function useKeyboardShortcut(key: string, callback: () => void) {
-  React.useEffect(() => {
+  useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
       if ((event.metaKey || event.ctrlKey) && event.key === key) {
         event.preventDefault();
@@ -54,7 +54,7 @@ function useKeyboardShortcut(key: string, callback: () => void) {
 }
 
 // Highlight matching text
-function highlightText(text: string, query: string): React.ReactNode {
+function highlightText(text: string, query: string): ReactNode {
   if (!query.trim() || !text) return text;
 
   // Split query into words for matching
@@ -187,13 +187,13 @@ export function SearchModal() {
   const router = useRouter();
   const locale = useLocale();
   const { open, setOpen } = useSearchModal();
-  const [query, setQuery] = React.useState('');
-  const [results, setResults] = React.useState<SearchResult[]>([]);
-  const [loading, setLoading] = React.useState(false);
-  const [db, setDb] = React.useState<Orama<typeof searchSchema> | null>(null);
+  const [query, setQuery] = useState('');
+  const [results, setResults] = useState<SearchResult[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [db, setDb] = useState<Orama<typeof searchSchema> | null>(null);
 
   // Load search index
-  React.useEffect(() => {
+  useEffect(() => {
     if (!open || db) return;
 
     async function loadIndex() {
@@ -215,7 +215,7 @@ export function SearchModal() {
   }, [open, db]);
 
   // Perform search
-  React.useEffect(() => {
+  useEffect(() => {
     if (!db || !query.trim()) {
       setResults([]);
       return;
@@ -259,7 +259,7 @@ export function SearchModal() {
   useKeyboardShortcut('k', () => setOpen(true));
 
   // Reset state when dialog closes
-  React.useEffect(() => {
+  useEffect(() => {
     if (!open) {
       setQuery('');
       setResults([]);
