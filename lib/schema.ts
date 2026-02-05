@@ -53,6 +53,12 @@ const navigationConfigSchema = z.object({
 
 const translationsSchema = z.object({
   on_this_page: z.string().default('On this page'),
+  search: z
+    .object({
+      search_documentation: z.string().default('Search documentation...'),
+      no_results_found: z.string().default('No results found'),
+    })
+    .prefault({}),
   page_navigation: z
     .object({
       next: z.string().default('Next'),

@@ -2,7 +2,7 @@
 
 import { useState, useEffect, type ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { create, load, search, type Orama } from '@orama/orama';
 import { FileTextIcon, HashIcon, Loader2Icon, SearchIcon } from 'lucide-react';
 import {
@@ -142,6 +142,7 @@ function getBreadcrumb(result: SearchResult, isSection: boolean): string {
 
 // Search trigger button (full version with text)
 export function SearchTrigger({ className }: { className?: string }) {
+  const t = useTranslations('search');
   const { setOpen } = useSearchModal();
 
   return (
@@ -156,7 +157,7 @@ export function SearchTrigger({ className }: { className?: string }) {
     >
       <div className={'flex items-center'}>
         <SearchIcon className={'mr-1'} />
-        Search documentation...
+        {t('search_documentation')}
       </div>
       <KbdGroup>
         <Kbd>⌘</Kbd>
@@ -184,6 +185,8 @@ export function SearchTriggerIcon({ className }: { className?: string }) {
 
 // Search modal component
 export function SearchModal() {
+  const t = useTranslations('search');
+
   const router = useRouter();
   const locale = useLocale();
   const { open, setOpen } = useSearchModal();
@@ -281,13 +284,13 @@ export function SearchModal() {
     <CommandDialog
       open={open}
       onOpenChange={setOpen}
-      title="Search Documentation"
+      title={t('search_documentation')}
       description="Search for pages and sections in the documentation"
       className="top-[15%] sm:max-w-2xl!"
     >
       <Command shouldFilter={false} className="rounded-lg">
         <CommandInput
-          placeholder="Search documentation..."
+          placeholder={t('search_documentation')}
           value={query}
           onValueChange={setQuery}
         />
@@ -299,16 +302,10 @@ export function SearchModal() {
           )}
 
           {!loading && query && results.length === 0 && (
-            <CommandEmpty>
-              No results found for &ldquo;{query}&rdquo;
-            </CommandEmpty>
+            <CommandEmpty>{t('no_results_found')}</CommandEmpty>
           )}
 
-          {!loading && !query && (
-            <div className="py-6 text-center text-sm text-muted-foreground">
-              Type to search...
-            </div>
-          )}
+          {!loading && !query && <div className="pb-1" />}
 
           {results.length > 0 && (
             <CommandGroup heading="Results">
