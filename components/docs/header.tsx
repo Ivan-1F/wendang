@@ -69,7 +69,7 @@ export function Header({ config }: { config: DocsConfig }) {
           <SearchTrigger className="hidden lg:flex" />
           <div className={'flex-1 flex items-center justify-end gap-2'}>
             <SearchTriggerIcon className="lg:hidden" />
-            <LanguageSelect />
+            <LanguageSelect size={'sm'} className={'hidden sm:flex'} />
             <ThemeSwitcher />
             <SidebarSheet config={config} />
           </div>

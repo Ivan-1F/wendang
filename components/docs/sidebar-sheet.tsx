@@ -4,6 +4,7 @@ import { Sidebar } from '@/components/docs/sidebar';
 import { SidebarWrapper } from '@/components/docs/sidebar-wrapper';
 import { SidebarSheetTrigger } from '@/components/docs/sidebar-sheet-trigger';
 import { GroupSelect } from '@/components/group-select';
+import { LanguageSelect } from '@/components/language-select';
 
 export const SidebarSheet = ({ config }: { config: DocsConfig }) => {
   if (!('groups' in config.navigation.group)) {
@@ -18,6 +19,7 @@ export const SidebarSheet = ({ config }: { config: DocsConfig }) => {
       <SheetContent showCloseButton={false} side="left" className="px-6">
         <SheetHeader className={'px-0'}>
           <div className={'mb-4 font-medium'}>{config.title}</div>
+          <LanguageSelect className={'w-full sm:hidden'} />
           <GroupSelect />
         </SheetHeader>
         <SidebarWrapper links={groups.map((group) => group.link)}>

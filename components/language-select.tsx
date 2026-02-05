@@ -11,8 +11,15 @@ import {
 } from '@/components/ui/select';
 import { useRouter, usePathname } from '@/i18n/navigation';
 import { useDocsConfig } from '@/components/docs/config-context';
+import { cn } from '@/lib/utils';
 
-export const LanguageSelect = () => {
+export const LanguageSelect = ({
+  size = 'default',
+  className,
+}: {
+  size?: 'sm' | 'default';
+  className?: string;
+}) => {
   const locale = useLocale();
   const pathname = usePathname();
   const router = useRouter();
@@ -37,7 +44,7 @@ export const LanguageSelect = () => {
         }
       }}
     >
-      <SelectTrigger className={'w-38'} size={'sm'}>
+      <SelectTrigger className={cn('w-38', className)} size={size}>
         <SelectValue />
       </SelectTrigger>
       <SelectContent alignItemWithTrigger>
