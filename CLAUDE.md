@@ -4,33 +4,22 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is **Wendang** - a documentation site template/framework built as a Turborepo monorepo. It uses Bun as the package manager and provides a modern MDX-based documentation system with internationalization support.
+This is **Wendang** - a documentation site template/framework. It uses Bun as the package manager and provides a modern MDX-based documentation system with internationalization support.
 
 **Important**: This is a docs TEMPLATE, not a real docs site.
 
 ## Commands
 
 ```bash
-# Development (from root)
-bun run dev       # Start dev server (localhost:3000)
-bun run build     # Build all workspaces
-bun run lint      # Run linter (Biome)
-
-# From apps/docs specifically
-bun run dev       # Next.js dev server
-bun run build     # Next.js production build (runs build:search first)
+bun run dev           # Start dev server (localhost:3000)
+bun run build         # Production build (runs build:search first)
 bun run build:search  # Generate Orama search index to public/search-index.json
-
-# Testing (from apps/docs)
-bun test          # Run tests using Bun's built-in test runner
+bun run lint          # Run linter (ESLint)
+bun test              # Run tests using Bun's built-in test runner
 bun test lib/slug.test.ts  # Run a single test file
 ```
 
 ## Architecture
-
-### Monorepo Structure
-- `apps/docs/` - Main Next.js 16 documentation app
-- `packages/wendang/` - Shared utility package (Bun module, see its own CLAUDE.md for Bun-specific guidance)
 
 ### Key Technologies
 - **Next.js 16** with App Router
@@ -39,7 +28,6 @@ bun test lib/slug.test.ts  # Run a single test file
 - **Orama** for client-side full-text search
 - **next-intl** for internationalization (cn/en/jp locales)
 - **Tailwind CSS** + **shadcn/ui** components
-- **Turborepo** for build orchestration
 
 ### Routing
 
@@ -54,11 +42,10 @@ The `lib/slug.ts` module handles path-to-slug conversion and page lookup. Key be
 
 ### Key Configuration Files
 
-- `apps/docs/docs.config.tsx` - **Site configuration entry point**: defines title, navigation structure (groups/sections/pages), and icon loader. This re-exports from a product-specific config file
-- `apps/docs/content.config.ts` - MDX processing, Shiki highlighting, remark/rehype plugins. Content is sourced from `content/docs-1/`
-- `apps/docs/lib/schema.ts` - Zod schemas for DocsConfig validation
-- `apps/docs/lib/config.ts` - Runtime config resolution with i18n locale merging (uses `ts-deepmerge`)
-- `turbo.json` - Turborepo task pipelines
+- `docs.config.tsx` - **Site configuration entry point**: defines title, navigation structure (groups/sections/pages), and icon loader. This re-exports from a product-specific config file
+- `content.config.ts` - MDX processing, Shiki highlighting, remark/rehype plugins. Content is sourced from `content/docs-1/`
+- `lib/schema.ts` - Zod schemas for DocsConfig validation
+- `lib/config.ts` - Runtime config resolution with i18n locale merging (uses `ts-deepmerge`)
 - `biome.json` - Linter/formatter config (2-space indent, single quotes)
 
 ### DocsConfig Schema (`lib/schema.ts`)
@@ -113,12 +100,12 @@ Code blocks support meta attributes parsed by `metaTransformer` in `content.conf
 ## Routing / Rewrites / i18n Summary
 
 ### Routes
-- Docs page route: `apps/docs/app/[locale]/docs/[[...slug]]/page.tsx`
-- LLM raw Markdown route: `apps/docs/app/[locale]/llms.mdx/docs/[[...slug]]/route.ts`
+- Docs page route: `app/[locale]/docs/[[...slug]]/page.tsx`
+- LLM raw Markdown route: `app/[locale]/llms.mdx/docs/[[...slug]]/route.ts`
   - Uses `getPage(slug, locale)` and `getMarkdown(page)` and returns `text/markdown`
 
 ### Rewrites (Next.js)
-Config location: `apps/docs/next.config.mjs`
+Config location: `next.config.mjs`
 
 - Rewrites `.mdx` direct hits or `Accept`/`User-Agent`-matched requests to the LLM route:
   - `/:locale/docs/:path*.mdx` → `/:locale/llms.mdx/docs/:path*`
@@ -126,7 +113,7 @@ Config location: `apps/docs/next.config.mjs`
   - `/:locale/docs/:path*` + AI-related UA → `/:locale/llms.mdx/docs/:path*`
 
 ### i18n Middleware
-Config location: `apps/docs/proxy.ts`
+Config location: `proxy.ts`
 
 - Uses `next-intl` `createMiddleware` for locale detection
 - The default matcher excludes dotted paths (e.g. `favicon.ico`), so we **allow `.mdx`** here:
