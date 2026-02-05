@@ -10,7 +10,7 @@ export function SidebarSheetTrigger() {
       render={
         <Button
           variant="outline"
-          size="icon"
+          size="icon-sm"
           className="lg:hidden"
           aria-label="Toggle sidebar"
         >
