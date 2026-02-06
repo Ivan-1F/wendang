@@ -51,7 +51,7 @@ const navigationConfigSchema = z.object({
   group: z.union([groupConfigSchema, singleGroupConfigSchema]),
 });
 
-const translationsSchema = z.object({
+export const translationsSchema = z.object({
   on_this_page: z.string().default('On this page'),
   search: z
     .object({
