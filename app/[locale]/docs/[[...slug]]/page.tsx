@@ -111,7 +111,7 @@ export default async function DocsPage({
       <div
         className={cn(
           'flex mx-auto gap-12 justify-center py-10 max-w-3xl',
-          'px-6 lg:pr-9', // lg: align with header
+          'px-6 lg:pr-9', // lg: keep right edge aligned with header
           { 'xl:pl-18 xl:max-w-6xl': toc.length !== 0 },
         )}
       >

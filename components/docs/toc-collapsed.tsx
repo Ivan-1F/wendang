@@ -71,7 +71,7 @@ export function TOCCollapsed({ items }: TOCProps) {
             'w-full h-10 flex items-center text-sm bg-background border-b',
             // lg: if sidebar does not exist, we need to align collapsible trigger with header
             'px-6 lg:px-9',
-            // if sidebar exists, we do not need to align collapsible trigger with header
+            // if sidebar exists, we do not need to align collapsible trigger's left edge with header, so reduce padding to look better
             'lg:group-has-[.docs-sidebar]/docs-main:pl-6',
           )}
         >
