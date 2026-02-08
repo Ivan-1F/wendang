@@ -125,7 +125,7 @@ export default async function DocsPage({
               <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-200">
                 {frontmatter.title}
               </h1>
-              <AiActions className={'hidden sm:block'} markdown={rawMarkdown || ''} />
+              <AiActions className={'hidden sm:flex shrink-0'} markdown={rawMarkdown || ''} />
             </div>
             <p className="text-lg max-w-none prose dark:prose-invert text-muted-foreground">
               {frontmatter.description}
