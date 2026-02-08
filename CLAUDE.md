@@ -116,9 +116,9 @@ Config location: `next.config.mjs`
 Config location: `proxy.ts`
 
 - Uses `next-intl` `createMiddleware` for locale detection
-- The default matcher excludes dotted paths (e.g. `favicon.ico`), so we **allow `.mdx`** here:
-  - `matcher: '/((?!api|trpc|_next|_vercel)(?!.*\\.(?!mdx(?:/|$))).*)'`
-  - This ensures `/docs/*.mdx` and `/[locale]/llms.mdx/...` go through middleware
+- Matcher excludes internal/API paths and a static-extension blacklist:
+  - `matcher: '/((?!api|trpc|_next|_vercel)(?!.*\\.(?:avif|bmp|css|gif|html|ico|jpe?g|js|json|map|mp4|pdf|png|svg|txt|webmanifest|webp|woff2?|xml|zip)$).*)'`
+  - This keeps routes like `/changelog/v1.0.0-beta.4` in middleware, while skipping common static files
 
 ### i18n Config Resolution
 - `i18n/routing.ts` dynamically generates routing config from `docsConfig.i18n.locales`
