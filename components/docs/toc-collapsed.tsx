@@ -64,12 +64,17 @@ export function TOCCollapsed({ items }: TOCProps) {
   }
 
   return (
-    <div
-      ref={containerRef}
-      className="xl:hidden sticky top-14 lg:top-24 z-10 -mx-6 lg:mx-0 lg:-mr-9"
-    >
+    <div ref={containerRef} className="xl:hidden sticky top-14 lg:top-24 z-10">
       <Collapsible.Root open={open} onOpenChange={setOpen}>
-        <Collapsible.Trigger className="w-full h-10 flex items-center text-sm bg-background border-b px-6 lg:pr-9">
+        <Collapsible.Trigger
+          className={cn(
+            'w-full h-10 flex items-center text-sm bg-background border-b',
+            // lg: if sidebar does not exist, we need to align collapsible trigger with header
+            'px-6 lg:px-9',
+            // if sidebar exists, we do not need to align collapsible trigger with header
+            'lg:group-has-[.docs-sidebar]/docs-main:pl-6',
+          )}
+        >
           <AlignJustifyIcon className="size-4 shrink-0 mr-2" />
           <span className="truncate font-medium flex-1 text-left">
             {activeItem?.title ?? 'On this page'}

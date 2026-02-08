@@ -107,12 +107,15 @@ export default async function DocsPage({
   return (
     <div className="flex-1">
       <TOCCollapsed items={toc} />
+      {/* Main: Article + Sidebar */}
       <div
         className={cn(
-          'flex gap-12 justify-center py-10 lg:pl-6 max-w-3xl mx-auto',
+          'flex mx-auto gap-12 justify-center py-10 max-w-3xl',
+          'px-6 lg:pr-9', // lg: align with header
           { 'xl:pl-18 xl:max-w-6xl': toc.length !== 0 },
         )}
       >
+        {/* Article */}
         <div className="grow">
           <header className="space-y-2">
             {section && (
@@ -165,6 +168,8 @@ export default async function DocsPage({
 
           <PageNavigation prev={navigation.prev} next={navigation.next} />
         </div>
+
+        {/* Sidebar */}
         <TOCSidebar items={toc} />
       </div>
     </div>

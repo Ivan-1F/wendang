@@ -15,7 +15,7 @@ export default function DocsLayout({
     <SearchModalProvider>
       <div>
         <Header config={config} />
-        <main className={'flex w-full px-6 lg:pr-9'}>
+        <main className={'group/docs-main flex w-full'}>
           {'groups' in group && (
             <SidebarWrapper links={group.groups.map((g) => g.link)}>
               {group.groups.map((g) => (
