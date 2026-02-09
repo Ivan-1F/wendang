@@ -19,6 +19,7 @@ import { TOCCollapsed } from '@/components/docs/toc-collapsed';
 import type { TableOfContents } from '@/lib/toc';
 import { cn } from '@/lib/utils';
 import { Card } from '@/components/docs/prelude/card';
+import * as Callouts from '@/components/docs/prelude/callouts';
 import { AiActions } from '@/components/docs/ai-actions';
 
 const isExternalLink = (href?: string) => {
@@ -138,6 +139,7 @@ export default async function DocsPage({
               components={{
                 pre: CodeBlock,
                 Card,
+                ...Callouts,
                 img: (props) => (
                   <Image
                     {...props}
