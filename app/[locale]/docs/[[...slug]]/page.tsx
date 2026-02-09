@@ -116,7 +116,7 @@ export default async function DocsPage({
         )}
       >
         {/* Article */}
-        <div className="grow">
+        <div className="grow w-0 min-w-0">
           <header className="space-y-2">
             {section && (
               <p className="text-sm font-semibold text-primary">{section}</p>
