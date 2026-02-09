@@ -51,7 +51,9 @@ const navigationConfigSchema = z.object({
   group: z.union([groupConfigSchema, singleGroupConfigSchema]),
 });
 
-export const translationsSchema = z.object({
+// Framework's built-in translations schema
+// Uses z.looseObject() to preserve user's custom translation keys at runtime
+export const translationsSchema = z.looseObject({
   on_this_page: z.string().default('On this page'),
   search: z
     .object({
