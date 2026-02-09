@@ -97,7 +97,7 @@ export function TOCCollapsed({ items }: TOCProps) {
         >
           <AnchorProvider toc={items} single>
             <ScrollProvider containerRef={containerRef}>
-              <nav className="py-3 px-6">
+              <nav className="py-3 px-6 lg:px-9 lg:group-has-[.docs-sidebar]/docs-main:pl-6">
                 <div className="flex flex-col gap-1 text-sm">
                   {items.map((item) => (
                     <TOCItem
