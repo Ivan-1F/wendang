@@ -68,7 +68,7 @@ export function TOCCollapsed({ items }: TOCProps) {
       <Collapsible.Root open={open} onOpenChange={setOpen}>
         <Collapsible.Trigger
           className={cn(
-            'w-full h-10 flex items-center text-sm bg-background border-b',
+            'group w-full h-10 flex items-center text-sm bg-background border-b',
             // lg: if sidebar does not exist, we need to align collapsible trigger with header
             'px-6 lg:px-9',
             // if sidebar exists, we do not need to align collapsible trigger's left edge with header, so reduce padding to look better
@@ -81,7 +81,7 @@ export function TOCCollapsed({ items }: TOCProps) {
           </span>
           <ChevronDownIcon
             className={cn(
-              'size-4 shrink-0 ml-2 transition-transform duration-200 data-panel-open:rotate-180'
+              'size-4 shrink-0 ml-2 transition-transform duration-200 group-data-panel-open:rotate-180'
             )}
           />
         </Collapsible.Trigger>
