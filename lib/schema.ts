@@ -111,7 +111,26 @@ export const translationsSchema = z.looseObject({
     .prefault({}),
 });
 
-export type Translations = z.infer<typeof translationsSchema>;
+/**
+ * Removes index signature (e.g. `[x: string]: unknown`) from a type.
+ *
+ * z.looseObject() adds `& { [x: string]: unknown }` to preserve extra keys at runtime,
+ * but this breaks next-intl's type inference (all keys become `never`).
+ *
+ * This utility keeps only the explicitly defined keys, allowing next-intl's
+ * useTranslations() to properly infer available translation keys.
+ */
+type RemoveIndexSignature<T> = {
+  [K in keyof T as string extends K
+    ? never
+    : number extends K
+      ? never
+      : K]: T[K];
+};
+
+export type Translations = RemoveIndexSignature<
+  z.infer<typeof translationsSchema>
+>;
 
 const localesConfigSchema = z.record(
   z.string(),
