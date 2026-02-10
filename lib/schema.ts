@@ -128,9 +128,13 @@ type RemoveIndexSignature<T> = {
       : K]: T[K];
 };
 
-export type Translations = RemoveIndexSignature<
+type FrameworkTranslations = RemoveIndexSignature<
   z.infer<typeof translationsSchema>
 >;
+
+// Interface allows declaration merging - users can extend it in their config
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export interface Translations extends FrameworkTranslations {}
 
 const localesConfigSchema = z.record(
   z.string(),
